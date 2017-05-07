@@ -1,0 +1,17 @@
+.detail-container{
+    padding: 15px 25px;
+}
+
+.returnLink{
+    color: #BBBBBB;
+    position: absolute;
+    top: -20px;
+    left: -15px;
+}
+
+.updateButton{
+    color: rgb(247, 181, 94);
+    text-decoration: underline;
+    cursor: pointer;
+}
+

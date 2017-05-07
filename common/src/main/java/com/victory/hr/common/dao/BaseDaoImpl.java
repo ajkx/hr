@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     protected final Class<T> entityClass;
 
-    protected BaseDaoImpl(Class<T> entityClass) {
-        this.entityClass = entityClass;
+    public BaseDaoImpl() {
+        //通过反射获取T的类型信息实例
+        this.entityClass = (Class<T>)((ParameterizedType)this.getClass().getGenericSuperclass())
+                .getActualTypeArguments()[0];
     }
 
     protected SessionFactory getSessionFactory() {

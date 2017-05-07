@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <!--扫描注解bean-->
+    <context:component-scan base-package="com.victory.hr.**.service,com.victory.hr.**.dao">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close"
+          p:driverClass="com.mysql.jdbc.Driver"
+          p:jdbcUrl="jdbc:mysql://127.0.0.1:3306/hr?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
+          p:user="root"
+          p:password="123"
+          p:maxPoolSize="200"
+          p:minPoolSize="2"
+          p:initialPoolSize="2"
+          p:maxIdleTime="20">
+    </bean>
+    
+    <!--配置hibernate-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" p:dataSource-ref="dataSource">
+        <property name="packagesToScan" value="com.victory.hr.**.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+                </prop>
+                <!--<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache_hibernate.xml</prop>-->
+            </props>
+        </property>
+    </bean>
+
+    <!--配置事务-->
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactory"/>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config expose-proxy="true" proxy-target-class="true">
+        <!--只对业务逻辑层实现事务-->
+        <aop:pointcut id="txPointcut" expression="execution(* com.victory.hr.*.service..*+.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" id="txAdvisor" pointcut-ref="txPointcut"/>
+    </aop:config>
+
+
+    <import resource="spring-config-cache.xml"/>
+    <import resource="spring-config-shiro.xml"/>
 </beans>
