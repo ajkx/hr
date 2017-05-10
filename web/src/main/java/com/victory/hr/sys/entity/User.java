@@ -1,5 +1,6 @@
 package com.victory.hr.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.victory.hr.common.entity.BaseEntity;
 import com.victory.hr.hrm.entity.HrmResource;
 
@@ -11,7 +12,8 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
-public class User extends BaseEntity<Long> {
+@Table(name = "UserInfo")
+public class User extends BaseEntity<Integer> {
 
     @Column(name = "username",unique = true)
     private String name;
@@ -26,7 +28,7 @@ public class User extends BaseEntity<Long> {
     private HrmResource hrmResource;
 
     //该用户的角色集合
-    @ManyToMany(targetEntity = Role.class,fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Role.class)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -67,11 +69,9 @@ public class User extends BaseEntity<Long> {
     public void setHrmResource(HrmResource hrmResource) {
         this.hrmResource = hrmResource;
     }
-
     public Set<Role> getRoles() {
         return roles;
     }
-
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }

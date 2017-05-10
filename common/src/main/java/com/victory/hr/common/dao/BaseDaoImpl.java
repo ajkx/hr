@@ -1,14 +1,23 @@
 package com.victory.hr.common.dao;
 
 
+import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Pageable;
+import com.victory.hr.common.search.SearchFilter;
+import com.victory.hr.common.search.Searchable;
 import com.victory.hr.common.utils.HibernateUtils;
 import net.sf.ehcache.hibernate.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ResolvableType;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collections;
 import java.util.List;
@@ -25,9 +34,10 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     protected final Class<T> entityClass;
 
+
     public BaseDaoImpl() {
         //通过反射获取T的类型信息实例
-        this.entityClass = (Class<T>)((ParameterizedType)this.getClass().getGenericSuperclass())
+        this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
     }
 
@@ -49,8 +59,8 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     @Override
     public void delete(ID id) {
-        HibernateUtils.getSession(sessionFactory).createQuery("delete " + entityClass.getSimpleName() + " en where en.id = ?1")
-                .setParameter(1, id)
+        HibernateUtils.getSession(sessionFactory).createQuery("delete " + entityClass.getSimpleName() + " en where en.id = ?")
+                .setParameter(0, id)
                 .executeUpdate();
     }
 
@@ -61,10 +71,10 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     @Override
     public T findOne(ID id) {
-        List<T> list = find("select en from " + entityClass.getSimpleName() +  "en where en.id = ?0",id);
+        List<T> list = find("select en from " + entityClass.getSimpleName() + " en where en.id = ?0", id);
         if (!CollectionUtils.isEmpty(list)) {
             return list.get(0);
-        }else{
+        } else {
             return null;
         }
 
@@ -72,12 +82,47 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     @Override
     public List<T> findAll() {
-        return find("select en from "+entityClass.getSimpleName()+" en");
+        return find("select en from " + entityClass.getSimpleName() + " en");
+    }
+
+    @Override
+    public PageInfo findAll(Searchable searchable) {
+        Session session = HibernateUtils.getSession(sessionFactory);
+
+        Criteria criteria1 = session.createCriteria(this.entityClass);
+        Criteria criteria2 = session.createCriteria(this.entityClass);
+
+        List<SearchFilter> searchFilters = searchable.getSearchFilters();
+
+        //反射的类
+        Class clazz = Restrictions.class;
+        for (SearchFilter searchFilter : searchFilters) {
+            String operator = searchFilter.getOperator();
+            try {
+                Method method = clazz.getMethod(operator,searchFilter.getClazz());
+                Object object = method.invoke(null,searchFilter.getObjects());
+                criteria1.add((Criterion) object);
+                criteria2.add((Criterion) object);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Pageable pageable = searchable.getPageable();
+        if (pageable != null) {
+            criteria1.setFirstResult((pageable.getcPage() - 1) * pageable.getpSize());
+            criteria1.setMaxResults(pageable.getpSize());
+        }
+
+        criteria1.addOrder(pageable.getOrder());
+        List list = criteria1.list();
+        Long total = (Long) criteria2.setProjection(Projections.rowCount()).uniqueResult();
+
+        return new PageInfo(total, list);
     }
 
     @Override
     public long findCount() {
-        Query query = HibernateUtils.getSession(sessionFactory).createQuery("select count(*) from "+entityClass.getSimpleName());
+        Query query = HibernateUtils.getSession(sessionFactory).createQuery("select count(*) from " + entityClass.getSimpleName());
         return (long) query.uniqueResult();
     }
 

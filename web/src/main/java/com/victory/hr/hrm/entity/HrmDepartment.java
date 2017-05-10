@@ -11,26 +11,25 @@ import javax.persistence.*;
  * @createDate 2016-10-19 10:20
  */
 @Entity
-public class HrmDepartment extends BaseEntity<Long>{
+public class HrmDepartment extends BaseEntity<Integer>{
 
 
-    @Column(name = "departmentName",nullable = false,length = 200)
+    @Column(name = "departmentname",nullable = false,length = 200)
     private String name;
 
-    @ManyToOne(targetEntity = HrmSubCompany.class)
-    @JoinColumn(name = "subCompanyId",nullable = false)
+    @ManyToOne(targetEntity = HrmSubCompany.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcompanyid1",nullable = false)
     private HrmSubCompany subCompany;
 
-    @ManyToOne(targetEntity = HrmDepartment.class)
-    @JoinColumn(name = "parentDep")
+    @ManyToOne(targetEntity = HrmDepartment.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "supdepid")
     private HrmDepartment parent;
 
-    @Column(name = "cancel")
-    private boolean cancel;
+    @Column(name = "canceled")
+    private Boolean cancel;
 
     public HrmDepartment() {
     }
-
 
     public String getName() {
         return name;
@@ -56,11 +55,11 @@ public class HrmDepartment extends BaseEntity<Long>{
         this.parent = parent;
     }
 
-    public boolean getCancel() {
+    public Boolean getCancel() {
         return cancel;
     }
 
-    public void setCancel(boolean cancel) {
+    public void setCancel(Boolean cancel) {
         this.cancel = cancel;
     }
 }

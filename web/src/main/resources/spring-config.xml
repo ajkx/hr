@@ -14,18 +14,21 @@
          http://www.springframework.org/schema/tx
          http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <context:property-placeholder location="classpath:resources.properties"/>
+
+    <context:annotation-config/>
+
     <!--扫描注解bean-->
-    <context:component-scan base-package="com.victory.hr.**.service,com.victory.hr.**.dao">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+    <context:component-scan base-package="com.victory.hr.**.service.**"/>
+    <context:component-scan base-package="com.victory.hr.**.dao.**"/>
 
     <!--配置数据源-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close"
-          p:driverClass="com.mysql.jdbc.Driver"
-          p:jdbcUrl="jdbc:mysql://127.0.0.1:3306/hr?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
-          p:user="root"
-          p:password="123"
+          p:driverClass="${connection.driver}"
+          p:jdbcUrl="${connection.url}"
+          p:user="${connection.username}"
+          p:password="${connection.password}"
           p:maxPoolSize="200"
           p:minPoolSize="2"
           p:initialPoolSize="2"
@@ -37,9 +40,9 @@
         <property name="packagesToScan" value="com.victory.hr.**.entity"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">none</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
@@ -61,11 +64,12 @@
     </tx:advice>
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!--只对业务逻辑层实现事务-->
-        <aop:pointcut id="txPointcut" expression="execution(* com.victory.hr.*.service..*+.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.victory.hr..service..*+.*(..)) "/>
         <aop:advisor advice-ref="txAdvice" id="txAdvisor" pointcut-ref="txPointcut"/>
     </aop:config>
 
 
     <import resource="spring-config-cache.xml"/>
     <import resource="spring-config-shiro.xml"/>
+
 </beans>

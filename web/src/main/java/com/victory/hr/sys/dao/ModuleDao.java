@@ -7,5 +7,5 @@ import com.victory.hr.sys.entity.User;
 /**
  * Created by ajkx on 2017/5/7.
  */
-public interface ModuleDao extends BaseDao<Module,Long> {
+public interface ModuleDao extends BaseDao<Module,Integer> {
 }

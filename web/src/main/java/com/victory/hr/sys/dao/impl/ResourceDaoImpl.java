@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * Created by ajkx on 2017/5/7.
  */
 @Repository
-public class ResourceDaoImpl extends BaseDaoImpl<Resource,Long> implements ResourceDao{
+public class ResourceDaoImpl extends BaseDaoImpl<Resource,Integer> implements ResourceDao{
 }

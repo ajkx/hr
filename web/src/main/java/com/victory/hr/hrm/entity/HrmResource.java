@@ -12,16 +12,16 @@ import java.util.Set;
  * Created by ajkx on 2017/5/1.
  */
 @Entity
-public class HrmResource extends BaseEntity<Long>{
+public class HrmResource extends BaseEntity<Integer>{
 
 
     //=======基本信息=======
     //姓名
-    @Column(name = "name")
+    @Column(name = "lastname")
     private String name;
 
     //工号
-    @Column(name = "workCode")
+    @Column(name = "workcode")
     private String workCode;
 
     //性别
@@ -33,7 +33,7 @@ public class HrmResource extends BaseEntity<Long>{
     private String birthday;
 
     //婚姻状态
-    @Column(name = "maritalStatus")
+    @Column(name = "maritalstatus")
     private String maritalStatus;
 
     //移动电话
@@ -45,121 +45,56 @@ public class HrmResource extends BaseEntity<Long>{
     private String email;
 
     //身份证号码
-    @Column(name = "certificateNum")
+    @Column(name = "certificatenum")
     private String certificateNum;
 
     //户口所在地
-    @Column(name = "nativePlace")
+    @Column(name = "nativeplace")
     private String nativePlace;
 
     //家庭住址
-    @Column(name = "homeAddress")
+    @Column(name = "homeaddress")
     private String homeAddress;
-
-    //家庭电话
-    @Column(name = "homePhone")
-    private String homePhone;
 
     //民族
     @Column(name = "folk")
     private String folk;
 
-    //健康情况
-    @Column(name = "healthInfo")
-    private String healthInfo;
-
-
     //=======工作信息========
     //分部id
-    @ManyToOne(targetEntity = HrmSubCompany.class)
-    @JoinColumn(name = "subCompanyId")
+    @ManyToOne(targetEntity = HrmSubCompany.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcompanyid1")
     private HrmSubCompany subCompany;
 
     //部门id
-    @ManyToOne(targetEntity = HrmDepartment.class)
-    @JoinColumn(name = "departmentId")
+    @ManyToOne(targetEntity = HrmDepartment.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "departmentid")
     private HrmDepartment department;
-    //职位id
-    @ManyToOne(targetEntity = HrmJobPosition.class)
-    @JoinColumn(name = "jobPosition")
-    private HrmJobPosition jobPosition;
+
+    //岗位id
+    @ManyToOne(targetEntity = HrmJobTitle.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "jobtitle")
+    private HrmJobTitle jobTitle;
 
     //上级id
-    @ManyToOne(targetEntity = HrmResource.class)
+    @ManyToOne(targetEntity = HrmResource.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "manager")
     private HrmResource manager;
 
-    //用工性质 枚举
-    @Column
-    private String useKind;
-
-    //办公电话
-    @Column(name = "officePhone")
-    private String officePhone;
 
     //状态 0 代表试用 1 代表正式 2 代表离职 枚举
     @Column(name = "status")
     private Integer status;
 
-    //招聘来源
-    @Column(name = "recruit")
-    private String recruit;
 
-    //入职日期
-    @Column(name = "entryDate")
-    private Date entryDate;
-
-    //试用期限，用数字表示，如果是1 则为一个月
-    @Column(name = "probationPeriod")
-    private Integer probationPeriod;
-
-    //转正日期
-    @Column(name = "officialDate")
-    private Date officialDate;
-
-
-    //========银行信息========
-    //开户银行
-    private String bankName;
-
-    //银行账号
-    private String bankAccount;
-
-    //========简历信息=========
-    //教育情况
-    @OneToMany(targetEntity = EducationInfo.class,mappedBy = "resource")
-    private Set<EducationInfo> educationInfos;
-
-    //工作经历
-    //双向1 - N 由N的一端控制关联属性
-    @OneToMany(targetEntity = WorkInfo.class, mappedBy = "resource")
-    private Set<WorkInfo> workInfos;
-
-    @OneToMany(targetEntity = SkillInfo.class, mappedBy = "resource")
-    private Set<SkillInfo> skillInfos;
-
-    //========职业资格=========
-    //社会职称
-    @OneToMany(targetEntity = JobCall.class, mappedBy = "resource")
-    private Set<JobCall> jobCalls;
-
-    //========合同信息=========
-    @OneToMany(targetEntity = HrmContract.class, mappedBy = "resource")
-    private Set<HrmContract> contracts;
-
-    //========人员变动信息=========
-    //异动纪录
-    @OneToMany(targetEntity = ChangeRecord.class, mappedBy = "resource")
-    private Set<ChangeRecord> changeRecords;
+    //试用结束(转正)日期  开始日期为createDate
+    @Column(name = "probationenddate")
+    private Date probationEnddate;
 
     //========系统信息=========
     //创建日期
-    @Column(name = "createDate",nullable = false)
-    private Timestamp createDate;
-
-    //创建人
-    @Column(name = "creater",nullable = false)
-    private String creater;
+    @Column(name = "createdate")
+    private Date createDate;
 
     //绑定的操作员
     @OneToOne(targetEntity = User.class)
@@ -174,7 +109,6 @@ public class HrmResource extends BaseEntity<Long>{
 //    private AttendanceGroup attendanceGroup;
 
     //========消费信息==========
-
 
 
     public String getName() {
@@ -257,28 +191,12 @@ public class HrmResource extends BaseEntity<Long>{
         this.homeAddress = homeAddress;
     }
 
-    public String getHomePhone() {
-        return homePhone;
-    }
-
-    public void setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
-    }
-
     public String getFolk() {
         return folk;
     }
 
     public void setFolk(String folk) {
         this.folk = folk;
-    }
-
-    public String getHealthInfo() {
-        return healthInfo;
-    }
-
-    public void setHealthInfo(String healthInfo) {
-        this.healthInfo = healthInfo;
     }
 
     public HrmSubCompany getSubCompany() {
@@ -297,12 +215,12 @@ public class HrmResource extends BaseEntity<Long>{
         this.department = department;
     }
 
-    public HrmJobPosition getJobPosition() {
-        return jobPosition;
+    public HrmJobTitle getJobTitle() {
+        return jobTitle;
     }
 
-    public void setJobPosition(HrmJobPosition jobPosition) {
-        this.jobPosition = jobPosition;
+    public void setJobTitle(HrmJobTitle jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public HrmResource getManager() {
@@ -313,22 +231,6 @@ public class HrmResource extends BaseEntity<Long>{
         this.manager = manager;
     }
 
-    public String getUseKind() {
-        return useKind;
-    }
-
-    public void setUseKind(String useKind) {
-        this.useKind = useKind;
-    }
-
-    public String getOfficePhone() {
-        return officePhone;
-    }
-
-    public void setOfficePhone(String officePhone) {
-        this.officePhone = officePhone;
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -337,116 +239,20 @@ public class HrmResource extends BaseEntity<Long>{
         this.status = status;
     }
 
-    public String getRecruit() {
-        return recruit;
+    public Date getProbationEnddate() {
+        return probationEnddate;
     }
 
-    public void setRecruit(String recruit) {
-        this.recruit = recruit;
+    public void setProbationEnddate(Date probationEnddate) {
+        this.probationEnddate = probationEnddate;
     }
 
-    public Date getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public Integer getProbationPeriod() {
-        return probationPeriod;
-    }
-
-    public void setProbationPeriod(Integer probationPeriod) {
-        this.probationPeriod = probationPeriod;
-    }
-
-    public Date getOfficialDate() {
-        return officialDate;
-    }
-
-    public void setOfficialDate(Date officialDate) {
-        this.officialDate = officialDate;
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
-
-    public Set<EducationInfo> getEducationInfos() {
-        return educationInfos;
-    }
-
-    public void setEducationInfos(Set<EducationInfo> educationInfos) {
-        this.educationInfos = educationInfos;
-    }
-
-    public Set<WorkInfo> getWorkInfos() {
-        return workInfos;
-    }
-
-    public void setWorkInfos(Set<WorkInfo> workInfos) {
-        this.workInfos = workInfos;
-    }
-
-    public Set<SkillInfo> getSkillInfos() {
-        return skillInfos;
-    }
-
-    public void setSkillInfos(Set<SkillInfo> skillInfos) {
-        this.skillInfos = skillInfos;
-    }
-
-    public Set<JobCall> getJobCalls() {
-        return jobCalls;
-    }
-
-    public void setJobCalls(Set<JobCall> jobCalls) {
-        this.jobCalls = jobCalls;
-    }
-
-    public Set<HrmContract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(Set<HrmContract> contracts) {
-        this.contracts = contracts;
-    }
-
-    public Set<ChangeRecord> getChangeRecords() {
-        return changeRecords;
-    }
-
-    public void setChangeRecords(Set<ChangeRecord> changeRecords) {
-        this.changeRecords = changeRecords;
-    }
-
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public String getCreater() {
-        return creater;
-    }
-
-    public void setCreater(String creater) {
-        this.creater = creater;
     }
 
     public User getUser() {
@@ -457,11 +263,8 @@ public class HrmResource extends BaseEntity<Long>{
         this.user = user;
     }
 
-//    public AttendanceGroup getAttendanceGroup() {
-//        return attendanceGroup;
-//    }
-
-//    public void setAttendanceGroup(AttendanceGroup attendanceGroup) {
-//        this.attendanceGroup = attendanceGroup;
-//    }
+    @Override
+    public String toString() {
+        return this.getId()+"";
+    }
 }

@@ -80,11 +80,6 @@ public class LoginController {
                 user.setPassword(regist_password);
                 user = userService.createUser(user);
                 jsonVo.setStatus(true).setMsg("注册成功！请登录使用").put("regist",true);
-//                Subject subject = SecurityUtils.getSubject();
-//                UsernamePasswordToken token = new UsernamePasswordToken(user.getName(),user.getPassword());
-//                subject.login(token);
-//                request.getSession().setAttribute("username",user.getName());
-//                jsonVo.setStatus(true).addValue("url","home.html");
             }
         }
         return jsonVo;

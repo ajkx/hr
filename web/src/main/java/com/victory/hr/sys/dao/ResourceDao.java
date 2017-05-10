@@ -7,5 +7,5 @@ import com.victory.hr.sys.entity.User;
 /**
  * Created by ajkx on 2017/5/7.
  */
-public interface ResourceDao extends BaseDao<Resource,Long> {
+public interface ResourceDao extends BaseDao<Resource,Integer> {
 }

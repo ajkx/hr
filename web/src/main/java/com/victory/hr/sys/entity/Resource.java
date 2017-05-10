@@ -1,5 +1,6 @@
 package com.victory.hr.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.victory.hr.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
-public class Resource extends BaseEntity<Long>{
+public class Resource extends BaseEntity<Integer>{
 
     public static enum ResourceType {
         menu("菜单"), button("按钮");
@@ -90,7 +91,7 @@ public class Resource extends BaseEntity<Long>{
     public void setUrl(String url) {
         this.url = url;
     }
-
+//    @JsonBackReference
     public Set<Role> getRoles() {
         return roles;
     }
@@ -102,7 +103,7 @@ public class Resource extends BaseEntity<Long>{
     public void setPermission(String permission) {
         this.permission = permission;
     }
-
+//    @JsonBackReference
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }

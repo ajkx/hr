@@ -28,7 +28,7 @@
                 </h4>
             </div>
             <div class="modal-body ">
-                <form class="form-horizontal" role="form" action="/changepassword" method="post"
+                <form class="form-horizontal" role="form" action="/sys/user/changePassword" method="post"
                       onsubmit="return ajaxSubmit(this)">
                     <%--eidtlist存放创建或者修改的编辑字段集合--%>
                     <input type="hidden" class="form-control" id="topicid" name="id" value=""/>

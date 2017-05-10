@@ -56,7 +56,7 @@ function showDelModal(url) {
 }
 
 function deleteData() {
-    $.get($('#del-btn').attr('data-del-url'), function (data) {
+    $.post($('#del-btn').attr('data-del-url'), function (data) {
         $('#confirmModal').modal("hide");
         if (data.status) {
             $.pjax({url: location.href, container: '#main-content'});

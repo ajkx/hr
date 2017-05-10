@@ -11,57 +11,44 @@ import javax.persistence.*;
  * @createDate 2016-10-19 9:49
  */
 @Entity
-public class HrmSubCompany extends BaseEntity<Long> {
+public class HrmSubCompany extends BaseEntity<Integer> {
 
 
-    @Column(name = "name",nullable = false,length = 200)
+    @Column(name = "subcompanyname")
     private String name;
 
-    @Column(name = "description",length = 200)
-    private String description;
-
-    @ManyToOne(targetEntity = HrmSubCompany.class)
-    @JoinColumn(name = "parentSub")
+    @ManyToOne(targetEntity = HrmSubCompany.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "supsubcomid")
     private HrmSubCompany parent;
 
-    @Column(name = "cancel")
+    @Column(name = "canceled")
     private Boolean cancel;
 
     public HrmSubCompany() {
     }
 
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setParent(HrmSubCompany parent) {
-        this.parent = parent;
-    }
-
-    public void setCancel(boolean cancel) {
-        this.cancel = cancel;
-    }
-
-
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public HrmSubCompany getParent() {
         return parent;
     }
 
-    public boolean getCancel() {
+    public void setParent(HrmSubCompany parent) {
+        this.parent = parent;
+    }
+
+    public Boolean getCancel() {
         return cancel;
+    }
+
+    public void setCancel(Boolean cancel) {
+        this.cancel = cancel;
     }
 }
 

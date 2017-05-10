@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
-public class Module extends BaseEntity<Long>{
+public class Module extends BaseEntity<Integer>{
 
 
     @Column

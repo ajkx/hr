@@ -1,14 +1,11 @@
 package com.victory.hr.sys.service;
 
-import com.victory.hr.common.BaseService;
+import com.victory.hr.common.service.BaseService;
 import com.victory.hr.sys.dao.ModuleDao;
 import com.victory.hr.sys.entity.Module;
 import com.victory.hr.sys.entity.Resource;
 import com.victory.hr.sys.entity.Role;
 import com.victory.hr.sys.entity.User;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.permission.WildcardPermission;
-import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +15,7 @@ import java.util.*;
  * Created by ajkx on 2017/5/7.
  */
 @Service
-public class ResourceService extends BaseService<Resource,Long>{
+public class ResourceService extends BaseService<Resource,Integer>{
 
     @Autowired
     private ModuleDao moduleDao;

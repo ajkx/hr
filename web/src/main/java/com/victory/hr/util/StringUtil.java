@@ -1,7 +1,7 @@
 package com.victory.hr.util;
 
 
-import com.victory.hr.common.BaseService;
+import com.victory.hr.common.service.BaseService;
 
 import java.util.ArrayList;
 import java.util.List;

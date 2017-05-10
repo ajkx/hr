@@ -1,7 +1,10 @@
-package com.victory.hr.common;
+package com.victory.hr.common.service;
 
 import com.victory.hr.common.dao.BaseDao;
+import com.victory.hr.common.dao.BaseDaoImpl;
 import com.victory.hr.common.entity.AbstractEntity;
+import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Searchable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -37,6 +40,10 @@ public abstract class BaseService<T extends AbstractEntity,ID extends Serializab
 
     public List<T> findAll() {
         return baseDao.findAll();
+    }
+
+    public PageInfo findAll(Searchable searchable) {
+        return baseDao.findAll(searchable);
     }
 
     public long count() {

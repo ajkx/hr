@@ -6,7 +6,7 @@ import com.victory.hr.sys.entity.User;
 /**
  * Created by ajkx on 2017/5/7.
  */
-public interface UserDao extends BaseDao<User,Long> {
+public interface UserDao extends BaseDao<User,Integer> {
 
     public User findByUserName(String username);
 }

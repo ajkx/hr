@@ -25,9 +25,6 @@ public class Layout {
     @Autowired
     private ResourceService resourceService;
 
-    @Autowired
-    private UserService userService;
-
     @RequestMapping(value = "/layout")
     public String layout(HttpSession session, Model model) {
         Map<Module,ArrayList<Resource>> maps = resourceService.findMenus((String) session.getAttribute("username"));

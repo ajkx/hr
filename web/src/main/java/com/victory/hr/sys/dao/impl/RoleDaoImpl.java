@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * Created by ajkx on 2017/5/7.
  */
 @Repository
-public class RoleDaoImpl extends BaseDaoImpl<Role,Long> implements RoleDao{
+public class RoleDaoImpl extends BaseDaoImpl<Role,Integer> implements RoleDao{
 }

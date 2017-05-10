@@ -1,5 +1,6 @@
 package com.victory.hr.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.victory.hr.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
-public class Role extends BaseEntity<Long>{
+public class Role extends BaseEntity<Integer>{
 
     @Column
     private String name;
@@ -25,7 +26,7 @@ public class Role extends BaseEntity<Long>{
     private Set<Resource> resources = new HashSet<Resource>();
 
 
-    @ManyToMany(targetEntity = User.class,fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = User.class)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
@@ -50,19 +51,19 @@ public class Role extends BaseEntity<Long>{
     public void setDescription(String description) {
         this.description = description;
     }
-
+//    @JsonBackReference
     public Set<Resource> getResources() {
         return resources;
     }
-
+//    @JsonBackReference
     public void setResources(Set<Resource> resources) {
         this.resources = resources;
     }
-
+//    @JsonBackReference
     public Set<User> getUsers() {
         return users;
     }
-
+//    @JsonBackReference
     public void setUsers(Set<User> users) {
         this.users = users;
     }
