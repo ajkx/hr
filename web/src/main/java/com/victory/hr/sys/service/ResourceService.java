@@ -1,6 +1,9 @@
 package com.victory.hr.sys.service;
 
+import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Searchable;
 import com.victory.hr.common.service.BaseService;
+import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.sys.dao.ModuleDao;
 import com.victory.hr.sys.entity.Module;
 import com.victory.hr.sys.entity.Resource;
@@ -22,6 +25,32 @@ public class ResourceService extends BaseService<Resource,Integer>{
 
     @Autowired
     private UserService userService;
+
+
+    @Override
+    public PageInfo findAll(Searchable searchable) {
+        PageInfo info = super.findAll(searchable);
+        List<Resource> list = info.getData();
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for (Resource resource : list) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", resource.getId());
+            map.put("name", resource.getName());
+            map.put("description",resource.getDescription());
+            Set<Role> roleSet = resource.getRoles();
+            List<Map<String, Object>> roles = new ArrayList<>();
+            for (Role role : roleSet) {
+                Map<String, Object> temp = new HashMap<>();
+                temp.put("id", role.getId());
+                temp.put("name", role.getName());
+                roles.add(temp);
+            }
+            map.put("roles", roles);
+            mapList.add(map);
+        }
+        info.setData(mapList);
+        return info;
+    }
 
     public Set<Resource> findByUsername(String username) {
         User user = userService.findByUserName(username);

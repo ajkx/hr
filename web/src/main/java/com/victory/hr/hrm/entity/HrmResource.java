@@ -82,7 +82,7 @@ public class HrmResource extends BaseEntity<Integer>{
     private HrmResource manager;
 
 
-    //状态 0 代表试用 1 代表正式 2 代表离职 枚举
+
     @Column(name = "status")
     private Integer status;
 
