@@ -73,6 +73,21 @@ public class UserService extends BaseService<User,Integer>{
         return user;
     }
 
+    @Override
+    public User save(User entity) {
+        passwordHelper.encryptPassword(entity);
+        return super.save(entity);
+    }
+
+    @Override
+    public void update(User entity) {
+        int id = entity.getId();
+        User user = baseDao.findOne(id);
+        user.setRoles(entity.getRoles());
+        user.setHrmResource(entity.getHrmResource());
+        super.update(user);
+    }
+
     public User findByUserName(String username) {
         return getUserDao().findByUserName(username);
     }

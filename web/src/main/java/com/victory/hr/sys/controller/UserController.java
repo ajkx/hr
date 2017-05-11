@@ -14,11 +14,14 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -49,41 +52,33 @@ public class UserController extends BaseCURDController<User, Integer> {
     protected void setCommonData(Model model) {
     }
 
-
-    @RequestMapping(value = "/test")
+    @RequestMapping(value = "/changePassword")
     public
     @ResponseBody
-    JsonVo test(@RequestBody UserPO userPO) {
-        getUserService().save(fillUserRole(userPO));
-        return null;
-    }
-
-    @RequestMapping(value = "/changePassword")
-    public @ResponseBody
-    JsonVo changePassword(PasswordVo passwordVo, HttpSession session){
+    JsonVo changePassword(PasswordVo passwordVo, HttpSession session) {
         //先判断用户
         String username = (String) session.getAttribute("username");
         User user = getUserService().findByUserName(username);
         String currentPassword = passwordVo.getCurrentPassword();
         String newPassword = passwordVo.getPassword();
         String confirmPassword = passwordVo.getConfirmPassword();
-        String salt ="";
+        String salt = "";
         JsonVo jsonVo = new JsonVo();
         if (user != null) {
             salt = user.getCredentialsSalt();
-            if(!passwordHelper.encryptPassword(currentPassword,salt).equals(user.getPassword())){
+            if (!passwordHelper.encryptPassword(currentPassword, salt).equals(user.getPassword())) {
                 jsonVo.setStatus(false);
                 jsonVo.setMsg("原密码错误！");
-            }else{
-                if(!passwordHelper.encryptPassword(newPassword,salt).equals(user.getPassword())){
-                    user.setPassword(passwordHelper.encryptPassword(newPassword,salt));
+            } else {
+                if (!passwordHelper.encryptPassword(newPassword, salt).equals(user.getPassword())) {
+                    user.setPassword(passwordHelper.encryptPassword(newPassword, salt));
                     getUserService().update(user);
                     jsonVo.setStatus(true);
                     jsonVo.setMsg("修改完成！");
                 }
             }
 
-        }else{
+        } else {
             jsonVo.setStatus(false);
             jsonVo.setMsg("会话过期！");
         }
@@ -106,16 +101,4 @@ public class UserController extends BaseCURDController<User, Integer> {
         return list;
     }
 
-    public User fillUserRole(UserPO userPo) {
-        User user = userPo.getUser();
-        user.setRoles(userPo.getRoles());
-//        int[] roleids = userPo.getRoles();;
-//        for(int i = 0; i < roleids.length; i++) {
-//            Role role = roleService.findOne(roleids[i]);
-//            if (role != null) {
-//                user.getRoles().add(role);
-//            }
-//        }
-        return user;
-    }
 }

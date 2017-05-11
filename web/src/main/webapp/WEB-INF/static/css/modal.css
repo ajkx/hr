@@ -276,7 +276,8 @@
 
 .smallSpan:after {
     color: #098B6B;
-    content: '\f00d';
+    /*content: '\f00d'; */
+    content: '\f188';
     margin-left: 2px;
 }
 

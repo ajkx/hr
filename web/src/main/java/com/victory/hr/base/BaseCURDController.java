@@ -38,7 +38,7 @@ import java.util.*;
  * Date: 2017/5/8.
  * Time:19:39
  */
-public class BaseCURDController<T extends AbstractEntity, ID extends Serializable> extends BaseController<T, ID> {
+public abstract class BaseCURDController<T extends AbstractEntity, ID extends Serializable> extends BaseController<T, ID> {
 
     @Autowired
     protected BaseService<T, ID> baseService;
@@ -232,7 +232,7 @@ public class BaseCURDController<T extends AbstractEntity, ID extends Serializabl
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public
     @ResponseBody
-    JsonVo create(@Valid T t, BindingResult result) {
+    JsonVo create(@RequestBody @Valid T t, BindingResult result) {
         if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
@@ -265,7 +265,7 @@ public class BaseCURDController<T extends AbstractEntity, ID extends Serializabl
 
     //执行更新操作
     @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
-    public @ResponseBody JsonVo update(@Valid T t, BindingResult result) {
+    public @ResponseBody JsonVo update(@RequestBody @Valid T t, BindingResult result) {
 
         if (permissionList != null) {
             this.permissionList.assertHasUpdatePermission();

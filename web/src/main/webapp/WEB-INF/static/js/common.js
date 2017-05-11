@@ -127,6 +127,28 @@ function ajaxSubmit(node) {
     })
 }
 
+function jsonSubmit(url,data){
+    $.ajax({
+        url: url,
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(data),
+        success: function(result){
+            if(result.status){
+                $('#edit-modal').modal('hide');
+                toastr.success(result.msg);
+                $.pjax({url:location.href,container:'#main-content'});
+            }else{
+                toastr.error(result.msg);
+            }
+        },
+        error: function(xhr, status){
+            toastr.error("数据传输错误" + status + ",请联系系统管理员");
+        }
+    });
+    return false;
+}
 function ajaxSubmitGet(url,successFn){
     $.ajax({
         url:url,

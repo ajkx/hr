@@ -80,12 +80,12 @@ function showSelectList(no,url,event){
 
 function clearSelectList(no,event){
     var node = $(no);
-    var span = node.siblings('span');
+    var li = node.siblings('li');
     var parent = node.parent();
     var mainid = parent.siblings('.mainid');
     var ul = parent.siblings('.selectlist');
     ul.find('li').css('display', 'list-item');
-    span.remove();
+    li.remove();
     mainid.val("");
     node.css('display','none');
     event.stopPropagation();
@@ -110,48 +110,26 @@ function showMulitSelectList(no,url,event){
     }else{
         $.get("/"+url+"/jsonlist",function(result){
             if(result.length > 0){
-                var spans = node.find('span');
+                var spans = node.find('li');
                 $(result).each(function(index,element){
                         var li = $('<li></li>');
                         for(var i = 0; i < spans.length; i++){
                             if(element.id == $(spans[i]).attr("label-id")){
                                 li.css('display','none');
-                                $(spans[i]).click(function(){
-                                    $(this).remove();
-                                    var array = mainid.val().split(",");
-                                    var array1 = new Array();
-                                    for(var i = 0; i < array.length; i++){
-                                        if(array[i] != element.id){
-                                            array1.push(array[i])
-                                        }else{
-                                            ul.find("li[label-id='"+element.id+"']").css("display","list-item");
-                                        }
-                                    }
-                                    mainid.val(array1.join());
-                                    event.stopPropagation();
-                                });
                             }
                         }
 
                         li.text(element.name)
                         .attr('label-id',element.id)
                         .click(function(event){
-                            $('<span></span>').text(element.name)
-                                .addClass('smallSpan')
-                                .click(function(event){
-                                    $(this).remove();
-                                    var array = mainid.val().split(",");
-                                    var array1 = new Array();
-                                    for(var i = 0; i < array.length; i++){
-                                        if(array[i] != element.id){
-                                            array1.push(array[i])
-                                        }else{
-                                            ul.find("li[label-id='"+element.id+"']").css("display","list-item");
-                                        }
-                                    }
-                                    mainid.val(array1.join());
-                                    event.stopPropagation();
-                                }).appendTo(node);
+                            var li1 = $("<li class='ant-tag ant-tag-blue' label-id='"+element.id+"'></li>");
+                            var span1 = $("<span></span>").text(element.name);
+                            var i1 = $("<i class='fa fa-times'></i>").click(function(){
+                                clearChooseIcon(this,event);
+                            });
+                            li1.append(span1);
+                            li1.append(i1);
+                            li1.appendTo(node);
                             //input标签赋值
                             mainid.val(mainid.val()+","+element.id);
                             $(this).css('display','none');
@@ -175,7 +153,24 @@ function showMulitSelectList(no,url,event){
     });
     event.stopPropagation();
 }
-
+function clearChooseIcon(node,event) {
+    var id = $(node).parent().attr("label-id");
+    var parent = $(node).parent().parent();
+    var mainid = parent.siblings(".mainid");
+    var ul = parent.siblings(".selectlist");
+    $(node).parent().remove();
+    var array = mainid.val().split(",");
+    var array1 = new Array();
+    for(var i = 0; i < array.length; i++){
+        if(array[i] != id && array[i] != ""){
+            array1.push(array[i])
+        }else{
+            ul.find("li[label-id='"+id+"']").css("display","list-item");
+        }
+    }
+    mainid.val(array1.join());
+    event.stopPropagation();
+}
 function checkStr(main,value){
     var array = main.split(",");
     for(var i = 0; i < array.length;i++){

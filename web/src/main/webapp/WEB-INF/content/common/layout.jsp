@@ -32,6 +32,7 @@
 
     <script type="text/javascript" src="${ctx}/static/js/jquery.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.pjax.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/jquery.serializejson.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/bootstrap-treeview.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>

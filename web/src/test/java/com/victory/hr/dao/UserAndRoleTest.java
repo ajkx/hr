@@ -54,14 +54,6 @@ public class UserAndRoleTest{
         userService.save(user);
     }
 
-    @Test
-    public void testUserController() {
-        UserPO userPO = new UserPO();
-        User user = new User();
-        user.setName("test");
-        userPO.setUser(user);
-        userController.test(userPO);
-    }
 
     @Test
     public void testDelete() {

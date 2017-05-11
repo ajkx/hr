@@ -24,6 +24,7 @@
         var query = {
             name: document.querySelector('[name="name"]').value
         }
+        console.log(query);
         document.querySelector('table').GM('setQuery', query).GM('refreshGrid',true, function () {
             console.log('搜索成功...');
         });
@@ -84,25 +85,8 @@
         $("thead").addClass("ant-table-thead");
         $('tbody').addClass("ant-table-tbody");
     });
-    function test(){
-        var data = {"user":{"name":"aaa","hrmResource":{"id":2212}},"roles":[{"id":1}]};
-        $.ajax({
-            url: "/sys/user/test",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: "json",
-            data: JSON.stringify(data),
-            success: function (result) {
-
-            },
-            error: function (xhr, status) {
-                alert("数据传输错误" + status + ",请联系系统管理员");
-            }
-        });
-    }
 </script>
 <div class="topic-toolbar">
-    <button onclick="test()">test</button>
     <a style="font-size: 14px;color:#2db7f5" href="javascript:void(0)"
        onclick="showEditModal('/sys/user/create')">新增操作员</a>
     <div class="ant-search-input-wrapper" style="width: 200px; float: right;margin-bottom: 10px">

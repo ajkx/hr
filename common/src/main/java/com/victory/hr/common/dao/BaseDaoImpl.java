@@ -109,7 +109,9 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
         }
         Pageable pageable = searchable.getPageable();
         if (pageable != null) {
-            criteria1.setFirstResult((pageable.getcPage() - 1) * pageable.getpSize());
+            //排除currentPage为负数
+            int currentPage = (pageable.getcPage() - 1) <= 0 ? 0 : (pageable.getcPage() - 1);
+            criteria1.setFirstResult(currentPage * pageable.getpSize());
             criteria1.setMaxResults(pageable.getpSize());
         }
 
