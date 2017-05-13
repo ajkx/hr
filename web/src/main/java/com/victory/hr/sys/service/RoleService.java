@@ -30,6 +30,7 @@ public class RoleService extends BaseService<Role,Integer>{
             Map<String, Object> map = new HashMap<>();
             map.put("id", role.getId());
             map.put("name", role.getName());
+            map.put("description", role.getDescription());
             Set<User> userSet = role.getUsers();
             List<Map<String, Object>> userList = new ArrayList<>();
             for (User user : userSet) {
@@ -49,7 +50,7 @@ public class RoleService extends BaseService<Role,Integer>{
                 temp.put("name", resource.getName());
                 resList.add(temp);
             }
-            map.put("resources", resourceSet);
+            map.put("resources", resList);
 
             mapList.add(map);
         }

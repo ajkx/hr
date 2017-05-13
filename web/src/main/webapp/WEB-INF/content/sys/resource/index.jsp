@@ -41,23 +41,30 @@
         supportAdjust: false,
         supportSorting: true,
         isCombSorting: true,
-        ajax_url: '/sys/role/list',
+        ajax_url: '/sys/resource/list',
         ajax_type: 'GET',
         pageSize: 10,
         height:"auto",
         columnData: [
             {
                 key : 'name',
-                text : '角色名'
+                text : '权限名称'
             },
             {
                 key : 'description',
-                text : '相关操作员',
+                text : '详细信息',
+                template:function(description,rowObejct) {
+                    if(description == null) {
+                        return "";
+                    }else{
+                        return description;
+                    }
+                }
 
             },
             {
                 key : 'roles',
-                text : '所有权限',
+                text : '所有角色',
                 template:function(roles,rowObject) {
                     if(roles == null){return "";}
                     var el = '';

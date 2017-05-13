@@ -30,7 +30,7 @@
         var action = <c:choose><c:when test="${op == '修改'}">"${t.id}/update"</c:when><c:otherwise>"create"</c:otherwise></c:choose>;
         var url = $(node).attr("action")+action;
         data.roles = roleArray;
-        jsonSubmit(url, data);
+        jsonSubmit(url, data,location.href);
         return false;
     }
 </script>

@@ -11,6 +11,7 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
+@Table(name = "EHR_Resource")
 public class Resource extends BaseEntity<Integer>{
 
     public static enum ResourceType {
@@ -47,7 +48,7 @@ public class Resource extends BaseEntity<Integer>{
     private String url;
 
     @ManyToMany(targetEntity = Role.class,fetch = FetchType.LAZY)
-    @JoinTable(name = "role_resource",
+    @JoinTable(name = "EHR_role_resource",
             joinColumns = @JoinColumn(name = "resource_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<Role>();

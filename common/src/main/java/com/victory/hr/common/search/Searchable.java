@@ -1,5 +1,6 @@
 package com.victory.hr.common.search;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -8,6 +9,9 @@ import java.util.List;
  * Time:9:02
  */
 public class Searchable {
+    //加上一个Request用于临时装参数
+
+    private HttpServletRequest request;
 
     private List<SearchFilter> searchFilters;
 
@@ -27,5 +31,13 @@ public class Searchable {
 
     public void setPageable(Pageable pageable) {
         this.pageable = pageable;
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

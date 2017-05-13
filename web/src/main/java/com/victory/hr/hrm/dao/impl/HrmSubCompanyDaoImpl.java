@@ -8,6 +8,8 @@ import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.entity.HrmSubCompany;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 职称数据操作层
  *
@@ -17,4 +19,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class HrmSubCompanyDaoImpl extends BaseDaoImpl<HrmSubCompany,Integer> implements HrmSubCompanyDao {
 
+    @Override
+    public List<HrmSubCompany> findRootSubCompany() {
+        return find("select s from HrmSubCompany s where s.parent = 0 and (cancel is null or cancel = 0)");
+    }
+
+    @Override
+    public List<HrmSubCompany> findByParent(HrmSubCompany subCompany) {
+        return find("select s from HrmSubCompany s where s.parent = ?0",subCompany);
+    }
 }

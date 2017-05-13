@@ -12,6 +12,7 @@ import com.victory.hr.common.search.Searchable;
 import com.victory.hr.common.utils.DateUtils;
 import com.victory.hr.hrm.entity.HrmDepartment;
 import com.victory.hr.hrm.entity.HrmResource;
+import com.victory.hr.hrm.entity.HrmStatus;
 import com.victory.hr.hrm.entity.HrmSubCompany;
 import com.victory.hr.hrm.service.HrmDepartmentService;
 import com.victory.hr.hrm.service.HrmResourceService;
@@ -49,11 +50,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
     @Autowired
     private HrmResourceService resourceService;
 
-    @Autowired
-    private HrmSubCompanyService subCompanyService;
 
-    @Autowired
-    private HrmDepartmentService departmentService;
 
     /**
      * 权限前缀：如sys:user
@@ -98,6 +95,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
         String resources = "";
 
         Searchable searchable = new Searchable();
+        searchable.setRequest(request);
         Pageable pageable = new Pageable();
         List<SearchFilter> searchFilters = new ArrayList<>();
         Enumeration enu = request.getParameterNames();
@@ -139,6 +137,24 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
                         pageable.setOrder(Order.asc("id"));
                     }
                     break;
+                case "status":{
+                    SearchFilter searchFilter = new SearchFilter();
+                    searchFilter.setKey(name);
+                    searchFilter.setOperator("in");
+                    searchFilter.setClazz(new Class[]{String.class,Collection.class});
+                    String statusStr = request.getParameter(name);
+                    String[] array = statusStr.split(",");
+                    List<HrmStatus> statusList = new ArrayList<>();
+                    for(int i = 0; i < array.length; i++) {
+                        if("".equals(array[i])) continue;
+                        int num = Integer.parseInt(array[i]);
+                        HrmStatus status = HrmStatus.values()[num];
+                        statusList.add(status);
+                    }
+                    searchFilter.setValue(statusList);
+                    searchFilter.setObjects(new Object[]{searchFilter.getKey(),searchFilter.getValue()});
+                    searchFilters.add(searchFilter);
+                }
             }
         }
         //特殊判断是考勤信息的，即有日期和人员
@@ -158,43 +174,43 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
             searchFilter.setKey("date");
             searchFilter.setOperator("between");
             searchFilter.setObjects(new Object[]{searchFilter.getKey(), beginDate, endDate});
-            searchFilter.setClazz(new Class[]{String.class, Date.class, Date.class});
+            searchFilter.setClazz(new Class[]{String.class, Object.class, Object.class});
             searchFilters.add(searchFilter);
 
             //人员信息的判断
             if (StringUtils.isNotBlank(resources)) {
-                String[] array = resources.split(",");
-                List<HrmResource> hrmResources = new ArrayList<>();
-                List<HrmSubCompany> subCompanies = new ArrayList<>();
-                List<HrmDepartment> departments = new ArrayList<>();
-                for (String var1 : array) {
-                    //人员id
-                    int id = Integer.parseInt(var1.substring(1, var1.length()));
-                    if (var1.contains("s")) {
-                        subCompanies.add(subCompanyService.findOne(id));
-                    } else if (var1.contains("d")) {
-                        departments.add(departmentService.findOne(id));
-                    } else {
-                        hrmResources.add(resourceService.findOne(id));
-                    }
-                }
-
-                List<Criterion> criterions = new ArrayList<>();
-                if (hrmResources.size() > 0) {
-                    criterions.add(Restrictions.in("resource", hrmResources));
-                }
-                if (subCompanies.size() > 0) {
-                    criterions.add(Restrictions.in("subCompany", subCompanies));
-                }
-                if (departments.size() > 0) {
-                    criterions.add(Restrictions.in("department", departments));
-                }
-
+//                String[] array = resources.split(",");
+//                List<HrmResource> hrmResources = new ArrayList<>();
+//                List<HrmSubCompany> subCompanies = new ArrayList<>();
+//                List<HrmDepartment> departments = new ArrayList<>();
+//                for (String var1 : array) {
+//                    //人员id
+//                    int id = Integer.parseInt(var1.substring(1, var1.length()));
+//                    if (var1.contains("s")) {
+//                        subCompanies.add(subCompanyService.findOne(id));
+//                    } else if (var1.contains("d")) {
+//                        departments.add(departmentService.findOne(id));
+//                    } else {
+//                        hrmResources.add(resourceService.findOne(id));
+//                    }
+//                }
+//
+//                List<Criterion> criterions = new ArrayList<>();
+//                if (hrmResources.size() > 0) {
+//                    criterions.add(Restrictions.in("resource", hrmResources));
+//                }
+//                if (subCompanies.size() > 0) {
+//                    criterions.add(Restrictions.in("subCompany", subCompanies));
+//                }
+//                if (departments.size() > 0) {
+//                    criterions.add(Restrictions.in("department", departments));
+//                }
+                Set<HrmResource> resourceSet = resourceService.splitForHrmResource(resources);
                 SearchFilter searchFilter1 = new SearchFilter();
                 searchFilter1.setKey("resource");
-                searchFilter1.setOperator("or");
-                searchFilter1.setObjects(new Object[]{criterions.toArray()});
-                searchFilter1.setClazz(new Class[]{(new Criterion[0]).getClass()});
+                searchFilter1.setOperator("in");
+                searchFilter1.setObjects(new Object[]{"resource",resourceSet});
+                searchFilter1.setClazz(new Class[]{String.class,Collection.class});
                 searchFilters.add(searchFilter1);
             }
         }

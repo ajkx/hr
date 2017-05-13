@@ -30,7 +30,7 @@
                     </div>
                     <div class="control-wrapper">
                         <p style="font-size: 14px"><b>相关角色 : </b>&nbsp;&nbsp;
-                            <c:forEach items="${obj.roles}" var="role">
+                            <c:forEach items="${t.roles}" var="role">
                                 ${role.name}&nbsp;&nbsp;
                             </c:forEach>
                         </p>

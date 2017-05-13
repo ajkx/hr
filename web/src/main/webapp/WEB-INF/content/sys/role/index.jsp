@@ -52,7 +52,14 @@
             },
             {
                 key : 'description',
-                text : '角色名'
+                text : '详细',
+                template:function(description,rowObejct) {
+                    if(description == null) {
+                        return "";
+                    }else{
+                        return description;
+                    }
+                }
             },
             {
                 key : 'users',
@@ -96,7 +103,7 @@
 </script>
 <div class="topic-toolbar">
     <a style="font-size: 14px;color:#2db7f5" href="javascript:void(0)"
-       onclick="showEditModal('/sys/user/create')">新增角色</a>
+       onclick="showEditModal('/sys/role/create')">新增角色</a>
     <div class="ant-search-input-wrapper" style="width: 200px; float: right;margin-bottom: 10px">
         <span class="ant-input-group ant-search-input">
             <div class="ant-select ant-select-combobox ant-select-enabled">

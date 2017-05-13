@@ -76,25 +76,22 @@ public class HrmResource extends BaseEntity<Integer>{
     @JoinColumn(name = "jobtitle")
     private HrmJobTitle jobTitle;
 
-    //上级id
-    @ManyToOne(targetEntity = HrmResource.class,fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager")
-    private HrmResource manager;
-
-
+    //递归上级字符串 ,隔开
+    @Column(name = "managerstr")
+    private String manager;
 
     @Column(name = "status")
-    private Integer status;
+    private HrmStatus status;
 
 
     //试用结束(转正)日期  开始日期为createDate
     @Column(name = "probationenddate")
-    private Date probationEnddate;
+    private String probationEnddate;
 
     //========系统信息=========
     //创建日期
     @Column(name = "createdate")
-    private Date createDate;
+    private String createDate;
 
     //绑定的操作员
     @OneToOne(targetEntity = User.class)
@@ -223,35 +220,35 @@ public class HrmResource extends BaseEntity<Integer>{
         this.jobTitle = jobTitle;
     }
 
-    public HrmResource getManager() {
+    public String getManager() {
         return manager;
     }
 
-    public void setManager(HrmResource manager) {
+    public void setManager(String manager) {
         this.manager = manager;
     }
 
-    public Integer getStatus() {
+    public HrmStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(HrmStatus status) {
         this.status = status;
     }
 
-    public Date getProbationEnddate() {
+    public String getProbationEnddate() {
         return probationEnddate;
     }
 
-    public void setProbationEnddate(Date probationEnddate) {
+    public void setProbationEnddate(String probationEnddate) {
         this.probationEnddate = probationEnddate;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 

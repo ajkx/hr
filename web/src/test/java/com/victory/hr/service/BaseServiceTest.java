@@ -1,5 +1,6 @@
 package com.victory.hr.service;
 
+import com.victory.hr.attendance.enums.RecordType;
 import com.victory.hr.common.search.PageInfo;
 import com.victory.hr.common.search.Pageable;
 import com.victory.hr.common.search.SearchFilter;
@@ -61,4 +62,5 @@ public class BaseServiceTest extends BaseTest{
         PageInfo pageInfo = userService.findAll(searchable);
         System.out.println(pageInfo.getTotals());
     }
+
 }

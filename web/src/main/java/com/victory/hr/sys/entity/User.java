@@ -12,7 +12,7 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
-@Table(name = "UserInfo")
+@Table(name = "EHR_UserInfo")
 public class User extends BaseEntity<Integer> {
 
     @Column(name = "username",unique = true)
@@ -29,7 +29,7 @@ public class User extends BaseEntity<Integer> {
 
     //该用户的角色集合
     @ManyToMany(targetEntity = Role.class)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "EHR_user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<Role>();

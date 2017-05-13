@@ -8,6 +8,7 @@ import javax.persistence.*;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
+@Table(name = "EHR_Module")
 public class Module extends BaseEntity<Integer>{
 
 

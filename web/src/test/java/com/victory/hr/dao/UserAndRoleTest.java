@@ -1,5 +1,7 @@
 package com.victory.hr.dao;
 
+import com.victory.hr.hrm.entity.HrmSubCompany;
+import com.victory.hr.hrm.service.HrmSubCompanyService;
 import com.victory.hr.po.UserPO;
 import com.victory.hr.sys.controller.UserController;
 import com.victory.hr.sys.entity.Role;
@@ -16,6 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,6 +44,10 @@ public class UserAndRoleTest{
 
     @Autowired
     private UserController userController;
+
+    @Autowired
+    private HrmSubCompanyService subCompanyService;
+
     @Test
     public void testCreate() {
         User user = new User();
@@ -58,5 +65,11 @@ public class UserAndRoleTest{
     @Test
     public void testDelete() {
         userService.delete(32);
+    }
+
+    @Test
+    public void testHrmResourceDao() {
+        List<HrmSubCompany> subCompanyList = subCompanyService.findRootSubCompany();
+        System.out.println("aa");
     }
 }

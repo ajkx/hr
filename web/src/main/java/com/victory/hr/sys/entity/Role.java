@@ -11,6 +11,7 @@ import java.util.Set;
  * Created by ajkx on 2017/5/7.
  */
 @Entity
+@Table(name = "EHR_Role")
 public class Role extends BaseEntity<Integer>{
 
     @Column
@@ -20,14 +21,14 @@ public class Role extends BaseEntity<Integer>{
     private String description;
 
     @ManyToMany(targetEntity = Resource.class,fetch = FetchType.LAZY)
-    @JoinTable(name = "role_resource",
+    @JoinTable(name = "EHR_role_resource",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "resource_id", referencedColumnName = "id"))
     private Set<Resource> resources = new HashSet<Resource>();
 
 
     @ManyToMany(targetEntity = User.class)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "EHR_user_role",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<User>();

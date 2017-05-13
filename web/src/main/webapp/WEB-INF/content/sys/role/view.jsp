@@ -37,7 +37,7 @@
                     </div>
                     <div class="control-wrapper">
                         <p style="font-size: 14px"><b>相关权限 : </b>&nbsp;&nbsp;
-                            <c:forEach items="${obj.resources}" var="resource">
+                            <c:forEach items="${t.resources}" var="resource">
                                 ${resource.name}&nbsp;&nbsp;
                             </c:forEach>
                         </p>

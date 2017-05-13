@@ -127,7 +127,7 @@ function ajaxSubmit(node) {
     })
 }
 
-function jsonSubmit(url,data){
+function jsonSubmit(url,data,returnUrl){
     $.ajax({
         url: url,
         type: "POST",
@@ -138,7 +138,7 @@ function jsonSubmit(url,data){
             if(result.status){
                 $('#edit-modal').modal('hide');
                 toastr.success(result.msg);
-                $.pjax({url:location.href,container:'#main-content'});
+                $.pjax({url:returnUrl,container:'#main-content'});
             }else{
                 toastr.error(result.msg);
             }
