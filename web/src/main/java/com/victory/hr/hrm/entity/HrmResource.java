@@ -1,5 +1,6 @@
 package com.victory.hr.hrm.entity;
 
+import com.victory.hr.attendance.entity.AttendanceGroup;
 import com.victory.hr.common.entity.BaseEntity;
 import com.victory.hr.sys.entity.User;
 
@@ -97,16 +98,24 @@ public class HrmResource extends BaseEntity<Integer>{
     @OneToOne(targetEntity = User.class)
     private User user;
 
-    //========考勤信息==========
+   // ========考勤信息==========
     //恒定的排班
-//    @ManyToOne(targetEntity = AttendanceGroup.class)
-//    @JoinTable(name = "group_resource",
-//            joinColumns =@JoinColumn(name = "resource_id",referencedColumnName = "id",unique = true),
-//            inverseJoinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"))
-//    private AttendanceGroup attendanceGroup;
+    @ManyToOne(targetEntity = AttendanceGroup.class,cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @JoinTable(name = "EHR_group_resource",
+            joinColumns =@JoinColumn(name = "resource_id",referencedColumnName = "id",unique = true),
+            inverseJoinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"))
+    private AttendanceGroup attendanceGroup;
 
     //========消费信息==========
 
+
+    public AttendanceGroup getAttendanceGroup() {
+        return attendanceGroup;
+    }
+
+    public void setAttendanceGroup(AttendanceGroup attendanceGroup) {
+        this.attendanceGroup = attendanceGroup;
+    }
 
     public String getName() {
         return name;

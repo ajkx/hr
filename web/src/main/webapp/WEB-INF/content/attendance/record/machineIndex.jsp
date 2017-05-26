@@ -106,6 +106,13 @@
 
     }
 
+    //选择人员的回调清空方法
+    function resourceClearCallBack(){
+        $('#resourceBtn').text('全公司');
+        $('#resourceStr').val('');
+        searchData();
+    }
+
     function searchData(){
         var query = {
             beginDate: document.querySelector('[name="beginDate"]').value,

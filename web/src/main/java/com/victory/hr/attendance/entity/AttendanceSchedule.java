@@ -1,6 +1,8 @@
 package com.victory.hr.attendance.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.victory.hr.attendance.enums.ScheduleType;
+import com.victory.hr.common.controller.converter.JsonTimeDeserializer;
 import com.victory.hr.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -63,8 +65,8 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
     private Long attendanceTime;
 
     //下班是否需要打卡
-    @Column
-    private Boolean isPunch;
+    @Column(name = "isPunch")
+    private Boolean punch;
 
     //迟到早退的限定时间
     @Column
@@ -75,6 +77,16 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
 
     @Column
     private String description;
+
+    //单班次的休息时间
+    @Column
+    private Boolean haveRest;
+
+    @Column
+    private Time beginRest;
+
+    @Column
+    private Time endRest;
 
     @OneToMany(targetEntity = AttendanceGroup.class,mappedBy = "monday")
     private Set<AttendanceGroup> mondays;
@@ -98,7 +110,8 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
     private Set<AttendanceGroup> sundays;
 
     //是否休息班次
-    private Boolean isRest;
+    @Column(name = "isRest")
+    private Boolean rest;
 
     //关联的考勤组
     @ManyToMany(targetEntity = AttendanceSchedule.class)
@@ -135,6 +148,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return first_time_up;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setFirst_time_up(Time first_time_up) {
         this.first_time_up = first_time_up;
     }
@@ -143,6 +157,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return first_time_down;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setFirst_time_down(Time first_time_down) {
         this.first_time_down = first_time_down;
     }
@@ -151,6 +166,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return second_time_up;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setSecond_time_up(Time second_time_up) {
         this.second_time_up = second_time_up;
     }
@@ -159,6 +175,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return second_time_down;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setSecond_time_down(Time second_time_down) {
         this.second_time_down = second_time_down;
     }
@@ -167,6 +184,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return third_time_up;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setThird_time_up(Time third_time_up) {
         this.third_time_up = third_time_up;
     }
@@ -175,6 +193,7 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
         return third_time_down;
     }
 
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
     public void setThird_time_down(Time third_time_down) {
         this.third_time_down = third_time_down;
     }
@@ -204,11 +223,19 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
     }
 
     public Boolean getPunch() {
-        return isPunch;
+        return punch;
     }
 
     public void setPunch(Boolean punch) {
-        isPunch = punch;
+        this.punch = punch;
+    }
+
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
     }
 
     public Long getOffsetTime() {
@@ -292,11 +319,11 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
     }
 
     public Boolean getRest() {
-        return isRest;
+        return rest;
     }
 
     public void setRest(Boolean rest) {
-        isRest = rest;
+        this.rest = rest;
     }
 
     public Set<AttendanceGroup> getGroups() {
@@ -305,5 +332,55 @@ public class AttendanceSchedule extends BaseEntity<Integer>{
 
     public void setGroups(Set<AttendanceGroup> groups) {
         this.groups = groups;
+    }
+
+    public Boolean getHaveRest() {
+        return haveRest;
+    }
+
+    public void setHaveRest(Boolean haveRest) {
+        this.haveRest = haveRest;
+    }
+
+    public Time getBeginRest() {
+        return beginRest;
+    }
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
+    public void setBeginRest(Time beginRest) {
+        this.beginRest = beginRest;
+    }
+
+    public Time getEndRest() {
+        return endRest;
+    }
+    @JsonDeserialize(using = JsonTimeDeserializer.class)
+    public void setEndRest(Time endRest) {
+        this.endRest = endRest;
+    }
+
+    @Override
+    public String toString() {
+        return "AttendanceSchedule{" +
+                "name='" + name + '\'' +
+                ", simpleName='" + simpleName + '\'' +
+                ", scheduleType=" + scheduleType +
+                ", first_time_up=" + first_time_up +
+                ", first_time_down=" + first_time_down +
+                ", second_time_up=" + second_time_up +
+                ", second_time_down=" + second_time_down +
+                ", third_time_up=" + third_time_up +
+                ", third_time_down=" + third_time_down +
+                ", scope_up=" + scope_up +
+                ", scope_down=" + scope_down +
+                ", attendanceTime=" + attendanceTime +
+                ", punch=" + punch +
+                ", offsetTime=" + offsetTime +
+                ", acrossDay=" + acrossDay +
+                ", description='" + description + '\'' +
+                ", haveRest=" + haveRest +
+                ", beginRest=" + beginRest +
+                ", endRest=" + endRest +
+                ", rest=" + rest +
+                '}';
     }
 }

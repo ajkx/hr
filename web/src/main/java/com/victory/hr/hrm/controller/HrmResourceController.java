@@ -37,7 +37,7 @@ public class HrmResourceController extends BaseCURDController<HrmResource, Integ
     private HrmDepartmentService departmentService;
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,HrmResource resource) {
     }
 
     public HrmResourceService getService() {
@@ -165,8 +165,17 @@ public class HrmResourceController extends BaseCURDController<HrmResource, Integ
             Map<String, String> temp = new HashMap<>();
             temp.put("id", resource.getId() + "");
             temp.put("name", resource.getName());
-            temp.put("subcompany", resource.getSubCompany().getName());
-            temp.put("department", resource.getDepartment().getName());
+            String subCompany = "";
+            if (resource.getSubCompany() != null) {
+                subCompany = resource.getSubCompany().getName();
+            }
+            String department = "";
+            if (resource.getSubCompany() != null) {
+                department = resource.getDepartment().getName();
+            }
+
+            temp.put("subcompany", subCompany);
+            temp.put("department", department);
             mapList.add(temp);
         }
         return mapList;

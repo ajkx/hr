@@ -34,7 +34,7 @@ public class ResourceController extends BaseCURDController<Resource,Integer> {
     }
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,Resource resource) {
     }
 
     @RequiresPermissions(value = "resource:view")

@@ -14,6 +14,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -50,5 +51,10 @@ public class HrmResourceDaoImpl extends BaseDaoImpl<HrmResource,Integer> impleme
     @Override
     public List<HrmResource> findByDepartment(HrmDepartment department) {
         return find("select r from HrmResource r where r.department = ?0 and r.status in (0,1,2,3)",department);
+    }
+
+    @Override
+    public List<HrmResource> findByWorkingAndEntryDate(Date date) {
+        return find("select r from HrmResource r where r.createDate <?0 and r.status in (0,1,2,3)",date.toString());
     }
 }

@@ -187,6 +187,10 @@ public class AttendanceDetail extends BaseEntity<Integer>{
     @OneToMany(targetEntity = OverTimeRecord.class,mappedBy = "detail")
     private Set<OverTimeRecord> overTimeRecords;
 
+    //异常记录关联
+    @OneToMany(targetEntity = RepairRecord.class, mappedBy = "detail")
+    private Set<RepairRecord> repairRecords;
+
     public AttendanceDetail() {
     }
 
@@ -556,6 +560,14 @@ public class AttendanceDetail extends BaseEntity<Integer>{
 
     public void setOverTimeRecords(Set<OverTimeRecord> overTimeRecords) {
         this.overTimeRecords = overTimeRecords;
+    }
+
+    public Set<RepairRecord> getRepairRecords() {
+        return repairRecords;
+    }
+
+    public void setRepairRecords(Set<RepairRecord> repairRecords) {
+        this.repairRecords = repairRecords;
     }
 
     @Override

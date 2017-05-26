@@ -103,7 +103,7 @@ function submitFormByPage(node,url) {
                 toastr.success(result.msg);
                 $.pjax({url:url,container:'#main-content'});
             }else{
-                toastr.error("执行错误!");
+                toastr.error(result.msg);
             }
         },
         error: function (xhr, status) {
@@ -138,7 +138,7 @@ function jsonSubmit(url,data,returnUrl){
             if(result.status){
                 $('#edit-modal').modal('hide');
                 toastr.success(result.msg);
-                $.pjax({url:returnUrl,container:'#main-content'});
+                //$.pjax({url:returnUrl,container:'#main-content'});
             }else{
                 toastr.error(result.msg);
             }

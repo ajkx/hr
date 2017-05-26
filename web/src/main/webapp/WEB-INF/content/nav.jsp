@@ -63,21 +63,21 @@
     <div class="left-panel">
         <a class="quickicon logo-text"><span>考勤管理系统</span></a>
     </div>
-    <div class="center-panel">
-        <a class="quickicon" href="#">
-            <span>排班管理</span>
-        </a>
-        <a class="quickicon" href="#">
-            <span>人员调整</span>
-        </a>
-        <a class="quickicon" href="#">
-            <span>考勤报表</span>
-        </a>
-    </div>
+    <%--<div class="center-panel">--%>
+        <%--<a class="quickicon" href="#">--%>
+            <%--<span>排班管理</span>--%>
+        <%--</a>--%>
+        <%--<a class="quickicon" href="#">--%>
+            <%--<span>人员调整</span>--%>
+        <%--</a>--%>
+        <%--<a class="quickicon" href="#">--%>
+            <%--<span>考勤报表</span>--%>
+        <%--</a>--%>
+    <%--</div>--%>
     <ul class="right-panel" style="display: block;">
-        <li class="nav-btn nav-attendance">
-            <div class="btn" id="attendance_sign">考勤签到</div>
-        </li>
+        <%--<li class="nav-btn nav-attendance">--%>
+            <%--<div class="btn" id="attendance_sign">考勤签到</div>--%>
+        <%--</li>--%>
         <li class="nav-btn nav-split">
             <div class="split-line"></div>
         </li>

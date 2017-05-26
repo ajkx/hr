@@ -9,7 +9,7 @@ import com.victory.hr.common.Constants;
  */
 public enum LevelType {
 
-    personal(Constants.personal),rest(Constants.rest),
+    personal(Constants.personal),rest(Constants.restSelf),
     sick(Constants.sick),business(Constants.business),
     injury(Constants.injury),delivery(Constants.delivery),
     married(Constants.married),funeral(Constants.funeral),

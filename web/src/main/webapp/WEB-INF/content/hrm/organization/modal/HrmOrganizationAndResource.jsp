@@ -161,7 +161,6 @@
                 depText += $(element).children("span").text()+" ";
             }else{
                 resCount++;
-                console.log("r" + resCount);
             }
             value += temp+",";
         });

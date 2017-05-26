@@ -10,7 +10,7 @@ import com.victory.hr.common.Constants;
 public enum Status {
     normal(Constants.normal),abnormal(Constants.abnormal),
     missing(Constants.missing),calculate(Constants.calculate),
-    error(Constants.error);
+    rest(Constants.rest), error(Constants.error),finish(Constants.finish);
 
     private final String name;
 

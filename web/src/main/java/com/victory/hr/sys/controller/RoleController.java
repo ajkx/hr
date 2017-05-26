@@ -33,7 +33,7 @@ public class RoleController extends BaseCURDController<Role,Integer>{
     }
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,Role role) {
     }
 
     @RequiresPermissions(value = "role:view")

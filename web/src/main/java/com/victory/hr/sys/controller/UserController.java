@@ -49,7 +49,7 @@ public class UserController extends BaseCURDController<User, Integer> {
     }
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,User user) {
     }
 
     @RequestMapping(value = "/changePassword")

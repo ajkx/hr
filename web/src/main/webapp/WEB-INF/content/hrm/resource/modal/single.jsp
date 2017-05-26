@@ -116,9 +116,9 @@
         $('#resource-list').empty();
         $('.checkAll').children('i').removeClass('fa-check-square');
 
-        $("#" + nodeStr).val('');
-        $('button[data-index="'+nodeStr+'"]').children("span").text("请选择");
-//        resourceClearCallBack();
+//        $("#" + nodeStr).val('');
+//        $('button[data-index="'+nodeStr+'"]').children("span").text("请选择");
+        resourceClearCallBack();
     }
 
 

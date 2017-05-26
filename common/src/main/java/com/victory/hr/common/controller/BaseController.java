@@ -37,7 +37,7 @@ public abstract class BaseController<T extends AbstractEntity,ID extends Seriali
      *
      * @param model
      */
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,T entity) {
     }
 
     /**

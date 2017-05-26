@@ -5,6 +5,7 @@ import com.victory.hr.hrm.entity.HrmDepartment;
 import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.entity.HrmSubCompany;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -35,4 +36,10 @@ public interface HrmResourceDao extends BaseDao<HrmResource,Integer>{
      */
     List<HrmResource> findByDepartment(HrmDepartment department);
 
+    /**
+     * 找出在职的并且入职日期小于date
+     * @param date
+     * @return
+     */
+    List<HrmResource> findByWorkingAndEntryDate(Date date);
 }

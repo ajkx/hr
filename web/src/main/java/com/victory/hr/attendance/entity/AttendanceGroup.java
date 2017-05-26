@@ -3,9 +3,14 @@ package com.victory.hr.attendance.entity;
 import com.victory.hr.attendance.enums.GroupType;
 import com.victory.hr.common.entity.BaseEntity;
 import com.victory.hr.hrm.entity.HrmResource;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -54,31 +59,36 @@ public class AttendanceGroup extends BaseEntity<Integer>{
 
     private String description;
 
-    //相关人员
+    //相关人员 从一的一端来控制变化 需要加上merge,并且resource.要重新setgroup
+//    @OneToMany(targetEntity = HrmResource.class,mappedBy = "attendanceGroup")
     @OneToMany(targetEntity = HrmResource.class)
+    @Cascade(value = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinTable(name = "EHR_group_resource",
-            joinColumns =@JoinColumn(name = "group_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "resource_id",referencedColumnName = "id",unique = true))
-    private Set<HrmResource> resources;
+            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "resource_id", referencedColumnName = "id", unique = true))
+    private Set<HrmResource> resources = new HashSet<>();
 
     //自由排班相关的班次
     @ManyToMany(targetEntity = AttendanceSchedule.class)
     @JoinTable(name = "EHR_group_schedule",
-        joinColumns = @JoinColumn(name="group_id",referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "schedule_id",referencedColumnName = "id"))
-    private Set<AttendanceSchedule> schedules;
+            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id"))
+    private Set<AttendanceSchedule> schedules = new HashSet<>();
 
-    //必须打卡的日期
-    @ElementCollection(targetClass = Date.class)
-    @CollectionTable(name="EHR_MustPunchDate",joinColumns = @JoinColumn(name = "group_id",nullable = false))
-    @Column(name = "punchDate")
-    private Set<Date> mustPunchDate;
-
-    //不需要打卡的日期
-    @ElementCollection(targetClass = Date.class)
-    @CollectionTable(name="EHR_NoNeedPunchDate",joinColumns = @JoinColumn(name = "group_id",nullable = false))
-    @Column(name = "noNeedDate")
-    private Set<Date> noNeedPunchDate;
+    //    //必须打卡的日期
+//    @ElementCollection(targetClass = Date.class)
+//    @CollectionTable(name="EHR_MustPunchDate",joinColumns = @JoinColumn(name = "group_id",nullable = false))
+//    @Column(name = "punchDate")
+//    private Set<Date> mustPunchDate;
+//
+//    //不需要打卡的日期
+//    @ElementCollection(targetClass = Date.class)
+//    @CollectionTable(name="EHR_NoNeedPunchDate",joinColumns = @JoinColumn(name = "group_id",nullable = false))
+//    @Column(name = "noNeedDate")
+//    private Set<Date> noNeedPunchDate;
+    @OneToMany(targetEntity = SpecialDate.class,cascade = javax.persistence.CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
+//    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private Set<SpecialDate> specialDates = new HashSet<>();
 
     public String getName() {
         return name;
@@ -184,20 +194,29 @@ public class AttendanceGroup extends BaseEntity<Integer>{
         this.schedules = schedules;
     }
 
-    public Set<Date> getMustPunchDate() {
-        return mustPunchDate;
+    public Set<SpecialDate> getSpecialDates() {
+        return specialDates;
     }
 
-    public void setMustPunchDate(Set<Date> mustPunchDate) {
-        this.mustPunchDate = mustPunchDate;
+    public void setSpecialDates(Set<SpecialDate> specialDates) {
+        this.specialDates = specialDates;
     }
 
-    public Set<Date> getNoNeedPunchDate() {
-        return noNeedPunchDate;
+    @Override
+    public String toString() {
+        return "AttendanceGroup{" +
+                "name='" + name + '\'' +
+                ", groupType=" + groupType +
+                ", monday=" + monday +
+                ", tuesday=" + tuesday +
+                ", wednesday=" + wednesday +
+                ", thursday=" + thursday +
+                ", friday=" + friday +
+                ", saturday=" + saturday +
+                ", sunday=" + sunday +
+                ", holidayRest=" + holidayRest +
+                ", description='" + description + '\'' +
+                ", specialDates=" + specialDates +
+                '}';
     }
-
-    public void setNoNeedPunchDate(Set<Date> noNeedPunchDate) {
-        this.noNeedPunchDate = noNeedPunchDate;
-    }
-
 }

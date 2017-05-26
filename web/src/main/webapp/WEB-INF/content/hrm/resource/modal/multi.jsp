@@ -15,7 +15,7 @@
         //初始化已选的员工的li
         if (currentList != "") {
             var ul = $("#resource-list");
-            $.get("/resource/list/array", {resourceStr: currentList}, function (result) {
+            $.get("/hrm/resource/modal/list", {resourceStr: currentList}, function (result) {
                 if (result.status) {
                     $(result.data).each(function (index, element) {
                         addTag(element.id, element.name);
@@ -80,7 +80,7 @@
                 value = Trim(value, "g");
                 value = CastChar(value);
                 searchTree(value);
-                searchResource("/resource/list/name",value);
+                searchResource("/hrm/resource/modal/name",value);
             }
         });
         var searchBtn = $('.search-input .fa-search');
@@ -89,7 +89,7 @@
             value = Trim(value, "g");
             value = CastChar(value);
             searchTree(value);
-            searchResource("/resource/list/name",search.val());
+            searchResource("/hrm/resource/modal/name",search.val());
         });
 
     });
@@ -140,9 +140,9 @@
         $('#resource-list').empty();
         $('.checkAll').children('i').removeClass('fa-check-square');
 
-        $("#" + nodeStr).val('');
-        $('button[data-index="'+nodeStr+'"]').children("span").text("请选择");
-//        resourceClearCallBack();
+//        $("#" + nodeStr).val('');
+//        $('button[data-index="'+nodeStr+'"]').children("span").text("请选择");
+        resourceClearCallBack();
     }
 
 

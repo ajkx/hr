@@ -17,4 +17,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DateRecordDaoImpl extends BaseDaoImpl<DateRecord,Integer> implements DateRecordDao{
+
+    @Override
+    public DateRecord getTopRecord() {
+        return find("from DateRecord order by id desc").get(0);
+    }
 }

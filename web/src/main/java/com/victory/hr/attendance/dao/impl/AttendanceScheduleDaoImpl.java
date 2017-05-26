@@ -9,6 +9,8 @@ import com.victory.hr.attendance.entity.AttendanceSchedule;
 import com.victory.hr.common.dao.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 考勤明细DAO接口
  *
@@ -17,4 +19,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class AttendanceScheduleDaoImpl extends BaseDaoImpl<AttendanceSchedule,Integer> implements AttendanceScheduleDao{
+
+    @Override
+    public List<AttendanceSchedule> findRestSchedule() {
+        return find("select s from AttendanceSchedule s where s.rest = ?0",true);
+    }
 }

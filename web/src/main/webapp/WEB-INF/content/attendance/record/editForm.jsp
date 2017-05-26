@@ -9,6 +9,7 @@
 <%@include file="../../common/init.jsp" %>
 <c:set var="returnUrl" value="${op != '修改' ? '/attendance/record/create.html' : '/attendance/record/manual.html'}"/>
 
+
 <script>
     function convertJson(node){
         var data = $(node).serializeJSON();
@@ -36,7 +37,7 @@
                     <div class="ant-col-2 ant-form-item-label"><label class="">签卡人员</label></div>
                     <div class="ant-col-8">
                         <div class="ant-form-item-control ">
-                            <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg" onclick="chooseModal(this,'/hrm/resource/modal/single')" data-index="resourceIds">
+                            <button type="button" class="ant-btn ant-btn-ghost ant-btn-lg" onclick="chooseModal(this,'/hrm/resource/modal/single')" data-index="resourceIds" id="resourcesBtn">
                                  <span>
                                     <c:choose>
                                         <c:when test="${t.resource != null}">
@@ -99,5 +100,10 @@
 
 
     });
+    //选择人员的回调清空方法
+    function resourceClearCallBack(){
+        $('#resourcesBtn').text('请选择');
+        $('#resourceIds').val('');
+    }
 
 </script>

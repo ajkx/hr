@@ -8,11 +8,11 @@ import com.victory.hr.hrm.dao.HrmResourceDao;
 import com.victory.hr.hrm.entity.HrmDepartment;
 import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.entity.HrmSubCompany;
-import com.victory.hr.sys.entity.Role;
-import com.victory.hr.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -40,8 +40,8 @@ public class HrmResourceService extends BaseService<HrmResource,Integer>{
         for (HrmResource resource : list) {
             Map<String, Object> map = new HashMap<>();
             map.put("id",resource.getId());
-            map.put("name", StringUtils.nullObject(resource.getName()));
-            map.put("workCode",StringUtils.nullObject(resource.getWorkCode()));
+            map.put("name", StringUtils.nullString(resource.getName()));
+            map.put("workCode",StringUtils.nullString(resource.getWorkCode()));
             map.put("subCompany", resource.getSubCompany() == null ? "" :resource.getSubCompany().getName());
             map.put("department", resource.getDepartment() == null ? "" :resource.getDepartment().getName());
             String manager = resource.getManager();
@@ -64,8 +64,8 @@ public class HrmResourceService extends BaseService<HrmResource,Integer>{
             map.put("manager", manager);
             map.put("jobPosition", resource.getJobTitle() == null ? "" :resource.getJobTitle().getName());
             map.put("status", resource.getStatus().getName());
-            map.put("mobile", StringUtils.nullObject(resource.getMobile()));
-            map.put("email", StringUtils.nullObject(resource.getEmail()));
+            map.put("mobile", StringUtils.nullString(resource.getMobile()));
+            map.put("email", StringUtils.nullString(resource.getEmail()));
             mapList.add(map);
         }
         info.setData(mapList);
@@ -120,5 +120,9 @@ public class HrmResourceService extends BaseService<HrmResource,Integer>{
             }
         }
         return resources;
+    }
+
+    public List<HrmResource> findAllWorkingAndEntryDate(Date date) {
+        return getDao().findByWorkingAndEntryDate(date);
     }
 }

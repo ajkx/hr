@@ -22,6 +22,8 @@
 
     <link rel="stylesheet" href="${ctx}/static/css/detailcontainer.css" />
     <link rel="stylesheet" href="${ctx}/static/css/tree.css" />
+
+    <link rel="stylesheet" href="${ctx}/static/css/home.css" />
     <%--时间选择控件--%>
     <link rel="stylesheet" href="${ctx}/static/css/bootstrap-clockpicker.min.css" />
     <link rel="stylesheet" href="${ctx}/static/css/bootstrap-datetimepicker.min.css" />
@@ -38,6 +40,7 @@
     <script type="text/javascript" src="${ctx}/static/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/messages_zh.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/GridManager.js"></script>
+    <script type="text/javascript" src="${ctx}/static/js/echarts.min.js"></script>
 
     <script type="text/javascript" src="${ctx}/static/js/ElementAction.js"></script>
     <script type="text/javascript" src="${ctx}/static/js/bootstrap-clockpicker.min.js"></script>
@@ -47,7 +50,6 @@
     <script type="text/javascript" src="${ctx}/static/js/toastr.js"></script>
 
     <script type="text/javascript" src="${ctx}/static/js/common.js"></script>
-
 
 </head>
 <body>

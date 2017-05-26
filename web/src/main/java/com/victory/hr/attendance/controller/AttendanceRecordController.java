@@ -34,7 +34,7 @@ public class AttendanceRecordController extends BaseCURDController<AttendanceRec
     }
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,AttendanceRecord record) {
     }
 
     //考勤机记录主页

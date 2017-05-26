@@ -125,12 +125,12 @@
                                 <label for="account" class="sr-only">Account</label>
                                 <input type="text" name="name" id="account" class="form-control" placeholder="账号"
                                        required
-                                       autofocus autocomplete="off">
+                                       autofocus autocomplete="off" value="test">
                             </div>
                             <div class="input-wrapper">
                                 <label for="password" class="sr-only">Password</label>
                                 <input type="password" name="password" id="password" class="form-control"
-                                       placeholder="密码" required>
+                                       placeholder="密码" required value="123">
                             </div>
                         </div>
                         <div class="button-wrapper">

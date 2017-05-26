@@ -21,7 +21,11 @@ public interface Constants {
 
     String calculate = "待计算";
 
+    String rest = "休息";
+
     String error = "作废";
+
+    String finish = "完成";
 
 // ======== 考勤组类别 =========
 
@@ -53,7 +57,7 @@ public interface Constants {
 
     String personal = "事假";
 
-    String rest = "调休";
+    String restSelf = "调休";
 
     String sick = "病假";
 
@@ -88,4 +92,6 @@ public interface Constants {
     String AD_level = "请假";
 
     String AD_rest = "休息";
+
+    String AD_miss = "旷工";
 }

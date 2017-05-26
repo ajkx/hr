@@ -66,7 +66,7 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     @Override
     public void update(T entity) {
-        HibernateUtils.getSession(sessionFactory).update(entity);
+        HibernateUtils.getSession(sessionFactory).saveOrUpdate(entity);
     }
 
     @Override

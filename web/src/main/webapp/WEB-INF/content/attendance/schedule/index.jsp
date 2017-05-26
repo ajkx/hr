@@ -22,9 +22,8 @@
     });
     function searchData(){
         var query = {
-            name: document.querySelector('[name="name"]').value
+            name: $('#searchinput').val()
         }
-        console.log(query);
         document.querySelector('table').GM('setQuery', query).GM('refreshGrid',true, function () {
             console.log('搜索成功...');
         });
@@ -56,7 +55,12 @@
             },
             {
                 key : 'totalTime',
-                text : '合计时间'
+                text : '合计时间',
+                template:function(totalTime,rowObject){
+                    var hour = Math.floor(totalTime / 3600000);
+                    var min = (totalTime % 3600000)/60000 ;
+                    return hour + "小时"+min+"分钟";
+                }
             },
             {
                 key : 'description',

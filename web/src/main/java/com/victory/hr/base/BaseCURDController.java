@@ -62,6 +62,9 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
         }
     }
 
+    protected void setIndexData(Model model) {
+
+    }
     /**
      * 返回模块的首页
      *
@@ -75,7 +78,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
         if (permissionList != null) {
             this.permissionList.assertHasViewPermission();
         }
-
+        setIndexData(model);
         return viewName("index");
     }
 
@@ -158,7 +161,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
             }
         }
         //特殊判断是考勤信息的，即有日期和人员
-        if (path.contains("attendance")) {
+        if (path.contains("attendance") && (path.contains("record") || path.contains("detail"))) {
 
             //日期信息的判断
             Date beginDate = null;
@@ -227,7 +230,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
             this.permissionList.assertHasViewPermission();
         }
         T entity = baseService.findOne(id);
-        setCommonData(model);
+        setCommonData(model,entity);
         model.addAttribute("t", entity);
         model.addAttribute(Constants.OP_NAME, "查看");
         return viewName("view");
@@ -239,7 +242,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
         if (permissionList != null) {
             this.permissionList.assertHasCreatePermission();
         }
-        setCommonData(model);
+        setCommonData(model,null);
         model.addAttribute(Constants.OP_NAME, "新增");
         return viewName("editForm");
     }
@@ -273,14 +276,17 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
             this.permissionList.assertHasUpdatePermission();
         }
         T entity = baseService.findOne(id);
-        setCommonData(model);
-        model.addAttribute(Constants.OP_NAME, "修改");
+        setCommonData(model,entity);
         model.addAttribute("t", entity);
+        model.addAttribute(Constants.OP_NAME, "修改");
+
+
+
         return viewName("editForm");
     }
 
     //执行更新操作
-    @RequestMapping(value = "{id}/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public @ResponseBody JsonVo update(@RequestBody @Valid T t, BindingResult result) {
 
         if (permissionList != null) {

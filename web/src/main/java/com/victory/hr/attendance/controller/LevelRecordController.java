@@ -5,6 +5,7 @@ import com.victory.hr.attendance.entity.LevelRecord;
 import com.victory.hr.attendance.service.AttendanceRecordService;
 import com.victory.hr.attendance.service.LevelRecordService;
 import com.victory.hr.base.BaseCURDController;
+import com.victory.hr.common.utils.DateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,15 @@ public class LevelRecordController extends BaseCURDController<LevelRecord,Intege
     }
 
     @Override
-    protected void setCommonData(Model model) {
+    protected void setCommonData(Model model,LevelRecord record) {
+
+    }
+
+    @Override
+    protected void setIndexData(Model model) {
+        String beginStr = DateUtils.getMonthFristDay().toString();
+        String endStr = DateUtils.getToday().toString();
+        model.addAttribute("beginDate", beginStr);
+        model.addAttribute("endDate", endStr);
     }
 }

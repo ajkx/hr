@@ -14,4 +14,5 @@ import java.util.List;
  */
 public interface AttendanceScheduleDao extends BaseDao<AttendanceSchedule,Integer> {
 
+    List<AttendanceSchedule> findRestSchedule();
 }

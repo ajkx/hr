@@ -9,4 +9,5 @@ import com.victory.hr.common.dao.BaseDao;
  */
 public interface DateRecordDao extends BaseDao<DateRecord,Integer> {
 
+    DateRecord getTopRecord();
 }
