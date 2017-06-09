@@ -19,7 +19,7 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
         ModelAndView model = new ModelAndView();
-        model.addObject("exception", "aaa");
+        model.addObject("exception", e);
         model.setViewName("unauthorized");
         return model;
     }

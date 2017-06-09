@@ -49,27 +49,28 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
             map.put("department", detail.getResource().getDepartment().getName());
             map.put("workCode", detail.getResource().getWorkCode());
             map.put("date", detail.getDate());
-            map.put("schedule", detail.getSchedule().getName());
+            AttendanceSchedule schedule = detail.getSchedule();
+            map.put("schedule", schedule == null ? "不在考勤组" : schedule.getName());
 
-            map.put("setting_first_up", StringUtils.nullString(detail.getSchedule().getFirst_time_up()));
+            map.put("setting_first_up", schedule == null ? "" : StringUtils.nullString(schedule.getFirst_time_up()));
             map.put("actual_first_up", StringUtils.nullString(detail.getFirst_time_up()));
             map.put("first_up_type", detail.getFirstUpType() == null ? "" : detail.getFirstUpType().getName());
-            map.put("setting_first_down", StringUtils.nullString(detail.getSchedule().getFirst_time_down()));
+            map.put("setting_first_down", schedule == null ? "" : StringUtils.nullString(schedule.getFirst_time_down()));
             map.put("actual_first_down", StringUtils.nullString(detail.getFirst_time_down()));
             map.put("first_down_type", detail.getFirstDownType() == null ? "" : detail.getFirstDownType().getName());
 
 
-            map.put("setting_second_up", StringUtils.nullString(detail.getSchedule().getSecond_time_up()));
+            map.put("setting_second_up", schedule == null ? "" : StringUtils.nullString(schedule.getSecond_time_up()));
             map.put("actual_second_up", StringUtils.nullString(detail.getSecond_time_up()));
             map.put("second_up_type", detail.getSecondUpType() == null ? "" : detail.getSecondUpType().getName());
-            map.put("setting_second_down", StringUtils.nullString(detail.getSchedule().getSecond_time_down()));
+            map.put("setting_second_down", schedule == null ? "" : StringUtils.nullString(schedule.getSecond_time_down()));
             map.put("actual_second_down", StringUtils.nullString(detail.getSecond_time_down()));
             map.put("second_down_type", detail.getSecondDownType() == null ? "" : detail.getSecondDownType().getName());
 
-            map.put("setting_third_up", StringUtils.nullString(detail.getSchedule().getThird_time_up()));
+            map.put("setting_third_up", schedule == null ? "" : StringUtils.nullString(schedule.getThird_time_up()));
             map.put("actual_third_up", StringUtils.nullString(detail.getThird_time_up()));
             map.put("third_up_type", detail.getThirdUpType() == null ? "" : detail.getThirdUpType().getName());
-            map.put("setting_third_down", StringUtils.nullString(detail.getSchedule().getThird_time_down()));
+            map.put("setting_third_down", schedule == null ? "" : StringUtils.nullString(schedule.getThird_time_down()));
             map.put("actual_third_down", StringUtils.nullString(detail.getThird_time_down()));
             map.put("third_down_type", detail.getThirdDownType() == null ? "" : detail.getThirdDownType().getName());
 
@@ -159,50 +160,5 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
         return getDao().findByHrmResourceAndDate(resource, date);
     }
 
-    public JsonVo updateDetail(int id, int type) {
-        AttendanceDetail detail = findOne(id);
-        JsonVo jsonVo = new JsonVo();
-        if (detail == null) {
-            jsonVo.setStatus(false);
-            jsonVo.setMsg("该操作失效！");
-        }else{
-            AttendanceSchedule schedule = detail.getSchedule();
-            switch (type) {
-                case 1:
-                    detail.setFirst_time_up(schedule.getFirst_time_up());
-                    detail.setFirstUpType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getFirst_time_up());
-                    break;
-                case 2:
-                    detail.setFirst_time_down(schedule.getFirst_time_down());
-                    detail.setFirstDownType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getFirst_time_down());
-                    break;
-                case 3:
-                    detail.setSecond_time_up(schedule.getSecond_time_up());
-                    detail.setSecondUpType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getSecond_time_up());
-                    break;
-                case 4:
-                    detail.setFirst_time_down(schedule.getSecond_time_down());
-                    detail.setSecondDownType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getSecond_time_down());
-                    break;
-                case 5:
-                    detail.setThird_time_up(schedule.getThird_time_up());
-                    detail.setThirdUpType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getThird_time_up());
-                    break;
-                case 6:
-                    detail.setThird_time_down(schedule.getThird_time_down());
-                    detail.setThirdDownType(AttendanceType.normal);
-                    jsonVo.put("time",schedule.getThird_time_down());
-                    break;
-            }
-            calculate.calculateTime(detail);
-            update(detail);
-            jsonVo.setStatus(true).setMsg("修改成功");
-        }
-        return jsonVo;
-    }
+
 }

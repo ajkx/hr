@@ -59,7 +59,7 @@ public class OverTimeRecord extends BaseEntity<Integer>{
     @Column
     private String reason;
 
-    //状态
+    //状态 //calculate(待计算，新建状态) abnormal(异常) finish(表示已计算)
     @Column
     private Status status;
 

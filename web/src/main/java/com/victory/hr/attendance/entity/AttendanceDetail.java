@@ -9,6 +9,7 @@ import com.victory.hr.hrm.entity.HrmResource;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -25,6 +26,7 @@ public class AttendanceDetail extends BaseEntity<Integer>{
     @JoinColumn(name = "resource",nullable = false)
     private HrmResource resource;
 
+    //schedule为null时前端应表示为不在考勤组，当特殊日期为休息或者节假日时，schedule为休息班次
     @ManyToOne(targetEntity = AttendanceSchedule.class)
     @JoinColumn(name = "schedule")
     private AttendanceSchedule schedule;
@@ -101,11 +103,11 @@ public class AttendanceDetail extends BaseEntity<Integer>{
     @Column
     private Integer earlyCount;
 
-    //旷工时间
+    //旷工时间 包括严重迟到和缺卡
     @Column
     private Long absenteeismTime;
 
-    //旷工次数
+    //旷工次数 包括严重迟到和缺卡
     @Column
     private Integer absenteeismCount;
 
@@ -173,7 +175,8 @@ public class AttendanceDetail extends BaseEntity<Integer>{
     @Column
     private Double actual_attendance_day;
 
-    //当条数据状态
+    //三种数据状态
+    //normal - 正常（初始化状态）  abnormal - 异常（有异常出勤）  calculate - 待计算（跨天明细）
     private Status status;
 
     //请假关联
@@ -181,15 +184,15 @@ public class AttendanceDetail extends BaseEntity<Integer>{
     @JoinTable(name = "EHR_detail_levelRecord",
             joinColumns = @JoinColumn(name = "detail_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "record_id",referencedColumnName = "id"))
-    private Set<LevelRecord> levelRecords;
+    private Set<LevelRecord> levelRecords = new HashSet<>();
 
     //加班关联
     @OneToMany(targetEntity = OverTimeRecord.class,mappedBy = "detail")
-    private Set<OverTimeRecord> overTimeRecords;
+    private Set<OverTimeRecord> overTimeRecords = new HashSet<>();
 
     //异常记录关联
     @OneToMany(targetEntity = RepairRecord.class, mappedBy = "detail")
-    private Set<RepairRecord> repairRecords;
+    private Set<RepairRecord> repairRecords = new HashSet<>();
 
     public AttendanceDetail() {
     }

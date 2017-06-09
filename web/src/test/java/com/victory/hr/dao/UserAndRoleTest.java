@@ -1,6 +1,8 @@
 package com.victory.hr.dao;
 
+import com.victory.hr.attendance.entity.AttendanceDetail;
 import com.victory.hr.attendance.entity.AttendanceGroup;
+import com.victory.hr.attendance.entity.OverTimeRecord;
 import com.victory.hr.attendance.service.AttendanceCalculate;
 import com.victory.hr.attendance.service.AttendanceGroupService;
 import com.victory.hr.hrm.dao.HrmResourceDao;
@@ -121,6 +123,15 @@ public class UserAndRoleTest{
 
     @Test
     public void testDate() throws ParseException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
+        AttendanceDetail detail = (AttendanceDetail) session.get(AttendanceDetail.class, 16);
+        OverTimeRecord record = (OverTimeRecord) session.get(OverTimeRecord.class, 3);
+        detail.setOverTimeRecords(null);
+        session.update(detail);
+//        System.out.println(detail.getOverTimeRecords());
+//        System.out.println(record.getDetail());
+        System.out.println("ad");
     }
 }

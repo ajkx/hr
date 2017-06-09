@@ -94,4 +94,6 @@ public interface Constants {
     String AD_rest = "休息";
 
     String AD_miss = "旷工";
+
+    String AD_lack = "缺卡";
 }

@@ -101,7 +101,7 @@ public class DateUtils {
      * @param end
      * @return
      */
-    public static List<Date> getDateList(Date begin,Date end){
+    public static List<Date> getDateList(java.util.Date begin,java.util.Date end){
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(begin);
         Calendar cal2 = Calendar.getInstance();

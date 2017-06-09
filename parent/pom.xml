@@ -288,6 +288,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--quartz相关包-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+
         <!--mvn install:install-file -Dfile=sqljdbc4.jar -Dpackaging=jar -DgroupId=com.microsoft.sqlserver -DartifactId=sqljdbc4 -Dversion=4.0-->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
@@ -295,6 +302,11 @@
             <version>4.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
 
     </dependencies>
     <properties>
@@ -328,5 +340,7 @@
         <aspectj.version>1.8.0</aspectj.version>
 
         <ehcache.core.version>2.6.6</ehcache.core.version>
+
+        <guava.version>19.0</guava.version>
     </properties>
 </project>

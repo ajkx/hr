@@ -76,18 +76,7 @@ public class AttendanceDetailController extends BaseCURDController<AttendanceDet
         return pageInfo;
     }
 
-    /**
-     * 修改异常出勤的
-     * @param id
-     * @param type
-     * @return
-     */
-    @RequiresPermissions(value = "AttendanceDetail:update")
-    @RequestMapping(value = "update/{id}/{type}")
-    public @ResponseBody
-    JsonVo updateDetail(@PathVariable int id, @PathVariable int type){
-        return getService().updateDetail(id, type);
-    }
+
 
     @RequestMapping(value = "/test")
     public void test() {

@@ -42,7 +42,7 @@
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.hbm2ddl.auto">none</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
@@ -68,6 +68,15 @@
         <aop:advisor advice-ref="txAdvice" id="txAdvisor" pointcut-ref="txPointcut"/>
     </aop:config>
 
+    <!--配置scheduler-->
+    <bean id="quartzRAMScheduler" class="com.victory.hr.schedule.ExtSchedulerFactoryBean">
+        <property name="schedulerName" value="quartzRAMScheduler"/>
+        <property name="configLocation" value="classpath:quartz-ram.properties"/>
+        <!--延迟几秒启动-->
+        <property name="startupDelay" value="30"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+        <property name="jobBeanCfgService" ref="jobBeanCfgService"/>
+    </bean>
 
     <import resource="spring-config-cache.xml"/>
     <import resource="spring-config-shiro.xml"/>

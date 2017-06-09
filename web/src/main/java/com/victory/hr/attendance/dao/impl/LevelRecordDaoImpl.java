@@ -6,6 +6,7 @@ import com.victory.hr.attendance.dao.AttendanceDetailDao;
 import com.victory.hr.attendance.dao.LevelRecordDao;
 import com.victory.hr.attendance.entity.AttendanceDetail;
 import com.victory.hr.attendance.entity.LevelRecord;
+import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.common.dao.BaseDaoImpl;
 import com.victory.hr.hrm.entity.HrmResource;
 import org.springframework.stereotype.Repository;
@@ -33,5 +34,10 @@ public class LevelRecordDaoImpl extends BaseDaoImpl<LevelRecord,Integer> impleme
     public List<LevelRecord> findByDateAndResource(Date beginDate, Date endDate, HrmResource resource) {
         return find("select r from LevelRecord r where resource = ?0 and date between ?1 and ?2 or endDate between ?1 and ?2 " +
                 "or ?1 between date and endDate or ?2 between date and endDate",resource,beginDate,endDate);
+    }
+
+    @Override
+    public List<LevelRecord> findByStatus(Status status) {
+        return find("select r from LevelRecord r where status = ?0",status);
     }
 }

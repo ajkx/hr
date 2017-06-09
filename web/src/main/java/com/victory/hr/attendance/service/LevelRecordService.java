@@ -27,14 +27,14 @@ public class LevelRecordService extends BaseService<LevelRecord,Integer> {
 
     @Override
     public LevelRecord save(LevelRecord entity) {
-        entity.setStatus(Status.normal);
+        entity.setStatus(Status.calculate);
         entity.setTotalTime(DateUtils.getTimeInterval(entity.getDate(), entity.getEndDate()));
         return super.save(entity);
     }
 
     @Override
     public void update(LevelRecord entity) {
-        entity.setStatus(Status.normal);
+        entity.setStatus(Status.calculate);
         entity.setTotalTime(DateUtils.getTimeInterval(entity.getDate(), entity.getEndDate()));
         super.update(entity);
     }

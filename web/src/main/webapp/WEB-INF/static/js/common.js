@@ -138,7 +138,7 @@ function jsonSubmit(url,data,returnUrl){
             if(result.status){
                 $('#edit-modal').modal('hide');
                 toastr.success(result.msg);
-                //$.pjax({url:returnUrl,container:'#main-content'});
+                $.pjax({url:returnUrl,container:'#main-content'});
             }else{
                 toastr.error(result.msg);
             }

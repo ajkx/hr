@@ -10,7 +10,7 @@ import com.victory.hr.common.dao.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 
 /**
- * 考勤明细DAO接口
+ * 考勤组DAO接口
  *
  * @author ajkx_Du
  * @create 2016-12-09 20:37

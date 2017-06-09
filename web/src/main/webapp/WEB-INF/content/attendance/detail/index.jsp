@@ -83,7 +83,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"1\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option> <option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"1\">改为正常</button>'" +
                                 ">"+first_up_type+"</span>";
                     }
 
@@ -110,7 +110,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"2\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option> <option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"2\">改为正常</button>'" +
                                 ">"+first_down_type+"</span>";                    }
 
                 }
@@ -135,7 +135,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"3\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option> <option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"3\">改为正常</button>'" +
                                 ">"+second_up_type+"</span>";
                     }
 
@@ -161,7 +161,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"4\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option> <option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"4\">改为正常</button>'" +
                                 ">"+second_down_type+"</span>";                    }
 
                 }
@@ -186,7 +186,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"5\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option> <option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"5\">改为正常</button>'" +
                                 ">"+third_up_type+"</span>";                    }
 
                 }
@@ -211,7 +211,7 @@
                     }else{
                         return "<span class='updateButton'" +
                                 " data-toggle='popover'" +
-                                " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"6\">改为正常</button>'" +
+                                " data-content='<select style=\"margin-bottom:5px;\"><option></option><option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" data-type=\"6\">改为正常</button>'" +
                                 ">"+third_down_type+"</span>";                    }
 
                 }
@@ -307,7 +307,8 @@
                         $("button[data-id]").click(function(){
                             var id = $(this).attr("data-id");
                             var type = $(this).attr("data-type");
-                            updateType('/attendance/detail/update/'+id +'/'+type,node);
+                            var str = $(this).siblings("select").val();
+                            updateType('/attendance/repairrecord/updatedetail/'+id +'/'+type+'?reason='+str,node);
                         });
                     });
 
@@ -398,12 +399,8 @@
         ajaxSubmitGet(url,function(result){
             $(node).popover('hide');
             if(result.status){
-                var time = result.time;
-                var td = $(node).parent().prev();
-                td.text(time);
-                $(node).text("正常");
-                $(node).removeClass("updateButton");
-                $(node).popover('destroy');
+                //刷新列表
+                searchData();
                 toastr.success("更改成功!");
             }else{
                 toastr.error("执行错误!");

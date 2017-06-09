@@ -9,7 +9,7 @@ import com.victory.hr.attendance.service.AttendanceDetailService;
 import com.victory.hr.attendance.service.AttendanceGroupService;
 import com.victory.hr.attendance.service.AttendanceScheduleService;
 import com.victory.hr.base.BaseCURDController;
-import com.victory.hr.util.DateUtil;
+import com.victory.hr.common.utils.DateUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -109,7 +109,7 @@ public class AttendanceGroupController extends BaseCURDController<AttendanceGrou
     @RequiresPermissions(value = "AttendanceGroup:create")
     @RequestMapping(value = "modal/punch")
     public String showPunchModal(Model model) {
-        model.addAttribute("date", DateUtil.getToday());
+        model.addAttribute("date", DateUtils.getToday());
         List<AttendanceSchedule> list = scheduleService.findAll();
         List<Map<String, String>> mapList = new ArrayList<>();
         for (AttendanceSchedule schedule : list) {
@@ -127,7 +127,7 @@ public class AttendanceGroupController extends BaseCURDController<AttendanceGrou
     @RequiresPermissions(value = "AttendanceGroup:create")
     @RequestMapping(value = "modal/not")
     public String showNotModal(Model model) {
-        model.addAttribute("date", DateUtil.getToday());
+        model.addAttribute("date", DateUtils.getToday());
         return viewName("/modal/notPunch");
     }
 }

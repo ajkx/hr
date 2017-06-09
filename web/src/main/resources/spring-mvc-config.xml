@@ -26,7 +26,7 @@
     <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
         <!--<property name="converters">-->
             <!--<set>-->
-                <!--<bean class="com.victory.hr.attendance.controller.converter.IntToRecordType"/>-->
+                <!--<bean class="com.victory.hr.attendance.JobBeanCfgController.converter.IntToRecordType"/>-->
             <!--</set>-->
         <!--</property>-->
     <!--</bean>-->

@@ -4,6 +4,7 @@ package com.victory.hr.attendance.dao.impl;
 
 import com.victory.hr.attendance.dao.AttendanceDetailDao;
 import com.victory.hr.attendance.entity.AttendanceDetail;
+import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.common.dao.BaseDao;
 import com.victory.hr.common.dao.BaseDaoImpl;
 import com.victory.hr.common.search.PageInfo;
@@ -28,7 +29,7 @@ import java.util.List;
 public class AttendanceDetailDaoImpl extends BaseDaoImpl<AttendanceDetail,Integer> implements AttendanceDetailDao{
     @Override
     public List<AttendanceDetail> findAcrossDayByDate(Date date) {
-        return find("select a from AttendanceDetail a where status = 3 and date <= ?0",date);
+        return find("select a from AttendanceDetail a where status = ?1 and date <= ?0",date, Status.calculate);
     }
 
     @Override

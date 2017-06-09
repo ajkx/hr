@@ -22,16 +22,21 @@ import java.sql.Date;
 public class RepairRecord extends BaseEntity<Integer>{
 
     @ManyToOne(targetEntity = HrmResource.class)
+    @JoinColumn(name = "resource")
     private HrmResource resource;
 
     private Date date;
+
+    //修改那个上下班 1 - firstUp 2 - firstDown 3 - secondUp 4 - secondDown 5 - thirdUp 6 - thirdDown 7 - otFirstUp 8 - otFirstDown
+    //多个按,号隔开
+    private String position;
 
     private String reason;
 
     private Status status;
 
     @ManyToOne(targetEntity = AttendanceDetail.class)
-    @JoinColumn(name = "detail_id",referencedColumnName = "id")
+    @JoinColumn(name = "detailId",referencedColumnName = "id")
     private AttendanceDetail detail;
 
     public HrmResource getResource() {
@@ -72,5 +77,13 @@ public class RepairRecord extends BaseEntity<Integer>{
 
     public void setDetail(AttendanceDetail detail) {
         this.detail = detail;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

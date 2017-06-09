@@ -53,7 +53,7 @@ public class LevelRecord extends BaseEntity<Integer>{
     @Column
     private String reason;
 
-    //状态
+    //状态 calculate (待计算)定期扫描新添加的记录时用于识别  finish (完成)
     @Column
     private Status status;
 

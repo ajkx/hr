@@ -117,7 +117,7 @@
                             ?
                     "<span class='updateButton'" +
                     " data-toggle='popover'" +
-                    " data-content='<button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" >改为正常</button>'" +
+                    " data-content='<select style=\"margin-bottom:5px;\"><option></option><option>个人忘记</option> <option>因公延误</option> <option>出差</option> <option>调休</option> <option>卡丢失或失效</option> </select><button class=\"ant-btn ant-btn-primary\" data-id=\""+rowObject.id+"\" >改为正常</button>'" +
                     ">"+status+"</span>"
                     : status;
                 }
@@ -159,7 +159,8 @@
                         var node = this;
                         $("button[data-id]").click(function(){
                             var id = $(this).attr("data-id");
-                            updateType('/attendance/overtimerecord/update/'+id,node);
+                            var str = $(this).siblings("select").val();
+                            updateType('/attendance/repairrecord/updatedetail/'+id +'/7?reason='+str,node);
                         });
                     });
 
