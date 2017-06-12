@@ -8,11 +8,18 @@ import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.attendance.service.LevelRecordService;
 import com.victory.hr.attendance.service.OverTimeRecordService;
 import com.victory.hr.base.BaseCURDController;
+import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Pageable;
+import com.victory.hr.common.search.Searchable;
 import com.victory.hr.common.utils.DateUtils;
 import com.victory.hr.common.utils.StringUtils;
 import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.service.HrmResourceService;
 import com.victory.hr.vo.JsonVo;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +30,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
@@ -122,4 +133,48 @@ public class OverTimeRecordController extends BaseCURDController<OverTimeRecord,
         return getService().updateRecord(id);
     }
 
+    @RequestMapping(value = "/excel")
+    public void getRecordExcel(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            String status = request.getParameter("status");
+            String beginDate = request.getParameter("beginDate");
+            String endDate = request.getParameter("endDate");
+            String fileName = "";
+            if ("abnormal".equals(status)) {
+                fileName = "加班异常表";
+            }else{
+                fileName = "加班表";
+            }
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + new String((beginDate + "至" + endDate+fileName).getBytes(),"iso-8859-1")+".xls");
+            response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+            OutputStream os = response.getOutputStream();
+
+            Searchable searchable = getSearchable(request);
+            Pageable pageable = searchable.getPageable();
+            pageable.setPaging(false);
+
+            PageInfo pageInfo = getService().findAll(searchable);
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.createSheet(fileName);
+            sheet.setDefaultColumnWidth(12);
+            HSSFCellStyle style=workbook.createCellStyle();
+            HSSFFont font = workbook.createFont();
+            font.setFontHeightInPoints((short) 11);
+            style.setFont(font);
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            setHeader(sheet,style);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setHeader(HSSFSheet sheet, HSSFCellStyle style) {
+
+    }
 }
