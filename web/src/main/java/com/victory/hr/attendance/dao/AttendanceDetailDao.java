@@ -5,6 +5,7 @@ package com.victory.hr.attendance.dao;
 import com.victory.hr.attendance.entity.AttendanceDetail;
 import com.victory.hr.common.dao.BaseDao;
 import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Searchable;
 import com.victory.hr.hrm.entity.HrmResource;
 
 import java.sql.Date;

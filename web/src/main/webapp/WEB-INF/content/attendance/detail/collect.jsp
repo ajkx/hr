@@ -251,35 +251,32 @@
 <div>
     <div style="margin-bottom: 18px">
         <div>
-            <div class="app-statistics-detail-index-date-member">
-                <div class="dtui-date-member">
-                    <span>时间：</span>
-                     <span class="ant-calendar-picker" style="width: 80px; margin-top: 0px;">
-                            <span>
-                            <input readonly="" name="beginDate" value="${beginDate}" placeholder="请选择日期"
-                                   class="ant-input datetimepicker">
-                            </span>
-                    </span>
-                    <%--<span style="margin:0 8px">至</span>--%>
-                     <%--<span class="ant-calendar-picker" style="width: 110px; margin-top: 0px;">--%>
-                            <%--<span>--%>
-                            <%--<input readonly="" value="${endDate}" placeholder="请选择结束日期"--%>
-                                   <%--class="ant-input datetimepicker">--%>
-                            <%--</span>--%>
-                    <%--</span>--%>
-                    <input type="hidden" value="" name="resources" id="resourceStr">
-                    <span style="margin-left: 50px;">部门/人员：</span>
-                    <button type="button" id="resourceBtn" onclick="chooseResource('/organization/modal/list','attendanceCollect');" class="ant-btn">
-                        <span>全公司</span>
-                    </button>
-                    <div class="detail-line"></div>
+            <form action="/attendance/detail/collectexcel" method="post">
+                <div class="app-statistics-detail-index-date-member">
+                    <div class="dtui-date-member">
+                        <span>时间：</span>
+                         <span class="ant-calendar-picker" style="width: 80px; margin-top: 0px;">
+                                <span>
+                                <input readonly="" name="beginDate" value="${beginDate}" placeholder="请选择日期"
+                                       class="ant-input datetimepicker">
+                                </span>
+                        </span>
+
+                        <input type="hidden" value="" name="resources" id="resourceStr">
+                        <span style="margin-left: 50px;">部门/人员：</span>
+                        <button type="button" id="resourceBtn" onclick="chooseResource('/organization/modal/list','attendanceCollect');" class="ant-btn">
+                            <span>全公司</span>
+                        </button>
+                        <div class="detail-line"></div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <button type="button" class="ant-btn ant-btn-primary">
-                    <span>导出每月汇总表</span>
-                </button>
-            </div>
+                <div>
+                    <button type="submit" class="ant-btn ant-btn-primary">
+                        <span>导出每月汇总表</span>
+                    </button>
+
+                </div>
+            </form>
         </div>
     </div>
     <table grid-manager="main"></table>

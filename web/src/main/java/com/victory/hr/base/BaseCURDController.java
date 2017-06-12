@@ -1,5 +1,6 @@
 package com.victory.hr.base;
 
+import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.common.service.BaseService;
 import com.victory.hr.common.Constants;
 import com.victory.hr.common.controller.BaseController;
@@ -91,135 +92,7 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
      */
     @RequestMapping(value = "/list")
     public @ResponseBody PageInfo list(HttpServletRequest request, Model model) {
-
-        String path = request.getServletPath();
-        String beginDateStr = "";
-        String endDateStr = "";
-        String resources = "";
-
-        Searchable searchable = new Searchable();
-        searchable.setRequest(request);
-        Pageable pageable = new Pageable();
-        List<SearchFilter> searchFilters = new ArrayList<>();
-        Enumeration enu = request.getParameterNames();
-        while (enu.hasMoreElements()) {
-            String name = (String) enu.nextElement();
-            switch (name) {
-                case "cPage":
-                    pageable.setcPage(Integer.parseInt(request.getParameter(name)));
-                    break;
-                case "pSize":
-                    pageable.setpSize(Integer.parseInt(request.getParameter(name)));
-                    break;
-                case "name": {
-                    SearchFilter searchFilter = new SearchFilter();
-                    searchFilter.setKey(name);
-                    searchFilter.setValue(request.getParameter(name));
-                    searchFilter.setOperator("ilike");
-                    searchFilter.setObjects(new Object[]{searchFilter.getKey(), searchFilter.getValue(), MatchMode.ANYWHERE});
-                    searchFilter.setClazz(new Class[]{String.class, String.class, MatchMode.class});
-                    searchFilters.add(searchFilter);
-                    break;
-                }
-                case "beginDate": {
-                    beginDateStr = request.getParameter("beginDate");
-                    endDateStr = request.getParameter("endDate");
-
-                    break;
-                }
-                case "resources": {
-                    resources = request.getParameter(name);
-                    break;
-                }
-                case "order":
-                    String order = request.getParameter(name);
-
-                    if ("desc".equals(order)) {
-                        pageable.setOrder(Order.desc("id"));
-                    } else if ("asc".equals(order)) {
-                        pageable.setOrder(Order.asc("id"));
-                    }
-                    break;
-                case "status":{
-                    SearchFilter searchFilter = new SearchFilter();
-                    searchFilter.setKey(name);
-                    searchFilter.setOperator("in");
-                    searchFilter.setClazz(new Class[]{String.class,Collection.class});
-                    String statusStr = request.getParameter(name);
-                    String[] array = statusStr.split(",");
-                    List<HrmStatus> statusList = new ArrayList<>();
-                    for(int i = 0; i < array.length; i++) {
-                        if("".equals(array[i])) continue;
-                        int num = Integer.parseInt(array[i]);
-                        HrmStatus status = HrmStatus.values()[num];
-                        statusList.add(status);
-                    }
-                    searchFilter.setValue(statusList);
-                    searchFilter.setObjects(new Object[]{searchFilter.getKey(),searchFilter.getValue()});
-                    searchFilters.add(searchFilter);
-                }
-            }
-        }
-        //特殊判断是考勤信息的，即有日期和人员
-        if (path.contains("attendance") && (path.contains("record") || path.contains("detail"))) {
-
-            //日期信息的判断
-            Date beginDate = null;
-            Date endDate = null;
-            if (StringUtils.isBlank(beginDateStr) || StringUtils.isBlank(endDateStr)) {
-                beginDate = DateUtils.getMonthFristDay();
-                endDate = DateUtils.getToday();
-            } else {
-                beginDate = DateUtils.parseDateByDay(beginDateStr);
-                endDate = DateUtils.parseDateByDay(endDateStr);
-            }
-            SearchFilter searchFilter = new SearchFilter();
-            searchFilter.setKey("date");
-            searchFilter.setOperator("between");
-            searchFilter.setObjects(new Object[]{searchFilter.getKey(), beginDate, endDate});
-            searchFilter.setClazz(new Class[]{String.class, Object.class, Object.class});
-            searchFilters.add(searchFilter);
-
-            //人员信息的判断
-            if (StringUtils.isNotBlank(resources)) {
-//                String[] array = resources.split(",");
-//                List<HrmResource> hrmResources = new ArrayList<>();
-//                List<HrmSubCompany> subCompanies = new ArrayList<>();
-//                List<HrmDepartment> departments = new ArrayList<>();
-//                for (String var1 : array) {
-//                    //人员id
-//                    int id = Integer.parseInt(var1.substring(1, var1.length()));
-//                    if (var1.contains("s")) {
-//                        subCompanies.add(subCompanyService.findOne(id));
-//                    } else if (var1.contains("d")) {
-//                        departments.add(departmentService.findOne(id));
-//                    } else {
-//                        hrmResources.add(resourceService.findOne(id));
-//                    }
-//                }
-//
-//                List<Criterion> criterions = new ArrayList<>();
-//                if (hrmResources.size() > 0) {
-//                    criterions.add(Restrictions.in("resource", hrmResources));
-//                }
-//                if (subCompanies.size() > 0) {
-//                    criterions.add(Restrictions.in("subCompany", subCompanies));
-//                }
-//                if (departments.size() > 0) {
-//                    criterions.add(Restrictions.in("department", departments));
-//                }
-                Set<HrmResource> resourceSet = resourceService.splitForHrmResource(resources);
-                SearchFilter searchFilter1 = new SearchFilter();
-                searchFilter1.setKey("resource");
-                searchFilter1.setOperator("in");
-                searchFilter1.setObjects(new Object[]{"resource",resourceSet});
-                searchFilter1.setClazz(new Class[]{String.class,Collection.class});
-                searchFilters.add(searchFilter1);
-            }
-        }
-        searchable.setPageable(pageable);
-        searchable.setSearchFilters(searchFilters);
-        PageInfo info = baseService.findAll(searchable);
+        PageInfo info = baseService.findAll(getSearchable(request));
         return info;
     }
 
@@ -323,5 +196,125 @@ public abstract class BaseCURDController<T extends AbstractEntity, ID extends Se
         return jsonVo;
     }
 
+    public Searchable getSearchable(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String beginDateStr = "";
+        String endDateStr = "";
+        String resources = "";
+
+        Searchable searchable = new Searchable();
+        searchable.setRequest(request);
+        Pageable pageable = new Pageable();
+        List<SearchFilter> searchFilters = new ArrayList<>();
+        Enumeration enu = request.getParameterNames();
+        while (enu.hasMoreElements()) {
+            String name = (String) enu.nextElement();
+            switch (name) {
+                case "cPage":
+                    pageable.setcPage(Integer.parseInt(request.getParameter(name)));
+                    break;
+                case "pSize":
+                    pageable.setpSize(Integer.parseInt(request.getParameter(name)));
+                    break;
+                case "name": {
+                    SearchFilter searchFilter = new SearchFilter();
+                    searchFilter.setKey(name);
+                    searchFilter.setValue(request.getParameter(name));
+                    searchFilter.setOperator("ilike");
+                    searchFilter.setObjects(new Object[]{searchFilter.getKey(), searchFilter.getValue(), MatchMode.ANYWHERE});
+                    searchFilter.setClazz(new Class[]{String.class, String.class, MatchMode.class});
+                    searchFilters.add(searchFilter);
+                    break;
+                }
+                case "beginDate": {
+                    beginDateStr = request.getParameter("beginDate");
+                    endDateStr = request.getParameter("endDate");
+
+                    break;
+                }
+                case "resources": {
+                    resources = request.getParameter(name);
+                    break;
+                }
+                case "order":
+                    String order = request.getParameter(name);
+
+                    if ("desc".equals(order)) {
+                        pageable.setOrder(Order.desc("id"));
+                    } else if ("asc".equals(order)) {
+                        pageable.setOrder(Order.asc("id"));
+                    }
+                    break;
+                case "hrmstatus":{
+                    String statusStr = request.getParameter(name);
+                    if(StringUtils.isNotBlank(statusStr)){
+                        SearchFilter searchFilter = new SearchFilter();
+                        searchFilter.setKey(name);
+                        searchFilter.setOperator("in");
+                        searchFilter.setClazz(new Class[]{String.class,Collection.class});
+                        String[] array = statusStr.split(",");
+                        List<HrmStatus> statusList = new ArrayList<>();
+                        for(int i = 0; i < array.length; i++) {
+                            if("".equals(array[i])) continue;
+                            int num = Integer.parseInt(array[i]);
+                            HrmStatus status = HrmStatus.values()[num];
+                            statusList.add(status);
+                        }
+                        searchFilter.setValue(statusList);
+                        searchFilter.setObjects(new Object[]{searchFilter.getKey(),searchFilter.getValue()});
+                        searchFilters.add(searchFilter);
+                    }
+                    break;
+                }
+                case "status":
+                    String str = request.getParameter(name);
+                    if(StringUtils.isNotBlank(str)) {
+                        SearchFilter searchFilter = new SearchFilter();
+                        searchFilter.setKey(name);
+                        searchFilter.setOperator("eq");
+                        searchFilter.setClazz(new Class[]{String.class, Object.class});
+                        Status status = Status.valueOf(str);
+                        searchFilter.setValue(status);
+                        searchFilter.setObjects(new Object[]{searchFilter.getKey(), searchFilter.getValue()});
+                        searchFilters.add(searchFilter);
+                    }
+                    break;
+            }
+        }
+        //特殊判断是考勤信息的，即有日期和人员
+        if (path.contains("attendance") && (path.contains("record") || path.contains("detail"))) {
+
+            //日期信息的判断
+            Date beginDate = null;
+            Date endDate = null;
+            if (StringUtils.isBlank(beginDateStr) || StringUtils.isBlank(endDateStr)) {
+                beginDate = DateUtils.getMonthFristDay();
+                endDate = DateUtils.getToday();
+            } else {
+                beginDate = DateUtils.parseDateByDay(beginDateStr);
+                endDate = DateUtils.parseDateByDay(endDateStr);
+            }
+            SearchFilter searchFilter = new SearchFilter();
+            searchFilter.setKey("date");
+            searchFilter.setOperator("between");
+            searchFilter.setObjects(new Object[]{searchFilter.getKey(), beginDate, endDate});
+            searchFilter.setClazz(new Class[]{String.class, Object.class, Object.class});
+            searchFilters.add(searchFilter);
+
+            //人员信息的判断
+            if (StringUtils.isNotBlank(resources)) {
+                Set<HrmResource> resourceSet = resourceService.splitForHrmResource(resources);
+                SearchFilter searchFilter1 = new SearchFilter();
+                searchFilter1.setKey("resource");
+                searchFilter1.setOperator("in");
+                searchFilter1.setObjects(new Object[]{"resource",resourceSet});
+                searchFilter1.setClazz(new Class[]{String.class,Collection.class});
+                searchFilters.add(searchFilter1);
+            }
+        }
+        searchable.setPageable(pageable);
+        searchable.setSearchFilters(searchFilters);
+        return searchable;
+    }
 }
 

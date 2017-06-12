@@ -15,6 +15,8 @@ public class Pageable {
 
     private Order order;
 
+    private boolean isPaging = true;
+
     public Pageable() {
         this.order = Order.asc("id");
     }
@@ -41,5 +43,13 @@ public class Pageable {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public boolean isPaging() {
+        return isPaging;
+    }
+
+    public void setPaging(boolean paging) {
+        isPaging = paging;
     }
 }

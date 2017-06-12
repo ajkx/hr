@@ -59,7 +59,7 @@
             },
             {
                 key: 'reason',
-                text: '请假原因',
+                text: '补卡原因',
                 width: '200px',
                 remind: ''
             },

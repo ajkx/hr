@@ -4,7 +4,6 @@ package com.victory.hr.attendance.service;
 import com.victory.hr.attendance.dao.AttendanceDetailDao;
 import com.victory.hr.attendance.entity.AttendanceDetail;
 import com.victory.hr.attendance.entity.AttendanceSchedule;
-import com.victory.hr.attendance.enums.AttendanceType;
 import com.victory.hr.common.search.PageInfo;
 import com.victory.hr.common.search.Searchable;
 import com.victory.hr.common.service.BaseService;
@@ -12,7 +11,6 @@ import com.victory.hr.common.utils.DateUtils;
 import com.victory.hr.common.utils.StringUtils;
 import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.service.HrmResourceService;
-import com.victory.hr.vo.JsonVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +30,9 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
     private AttendanceCalculate calculate;
 
     @Autowired
+    private AttendanceScheduleService scheduleService;
+
+    @Autowired
     private HrmResourceService resourceService;
 
     private AttendanceDetailDao getDao() {
@@ -48,9 +49,9 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
             map.put("name", detail.getResource().getName());
             map.put("department", detail.getResource().getDepartment().getName());
             map.put("workCode", detail.getResource().getWorkCode());
-            map.put("date", detail.getDate());
+            map.put("date", detail.getDate().toString());
             AttendanceSchedule schedule = detail.getSchedule();
-            map.put("schedule", schedule == null ? "不在考勤组" : schedule.getName());
+            map.put("schedule", schedule == null ? "不在考勤组" : schedule.getName()+" "+scheduleService.getScheduleTime(schedule));
 
             map.put("setting_first_up", schedule == null ? "" : StringUtils.nullString(schedule.getFirst_time_up()));
             map.put("actual_first_up", StringUtils.nullString(detail.getFirst_time_up()));
@@ -91,7 +92,7 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
                     + StringUtils.nullLong(detail.getLeave_injury())
                     + StringUtils.nullLong(detail.getLeave_personal())
                     + StringUtils.nullLong(detail.getLeave_rest());
-            map.put("level_time",levelTime);
+            map.put("level_time",levelTime+"");
             map.put("setting_time", StringUtils.nullString(detail.getShould_attendance_time()));
             map.put("actual_time", StringUtils.nullString(detail.getActual_attendance_time()));
             mapList.add(map);
@@ -101,8 +102,10 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
     }
 
     public PageInfo findAllCollect(HttpServletRequest request) {
-        int pageNo = Integer.parseInt(request.getParameter("cPage"));
-        int pageSize = Integer.parseInt(request.getParameter("pSize"));
+        String page = StringUtils.nullString(request.getParameter("cPage"));
+        String size = StringUtils.nullString(request.getParameter("pSize"));
+        int pageNo = page.equals("") ? 0 :Integer.parseInt(page);
+        int pageSize = page.equals("") ? 0 :Integer.parseInt(size);
         String beginStr = StringUtils.nullString(request.getParameter("beginDate"));
         String endStr = StringUtils.nullString(request.getParameter("endDate"));
         String resources = StringUtils.nullString(request.getParameter("resources"));
@@ -126,26 +129,33 @@ public class AttendanceDetailService extends BaseService<AttendanceDetail,Intege
         List<Map<String, Object>> mapList = new ArrayList<>();
         for (Object[] obj : list) {
             Map<String, Object> map = new HashMap<>();
-            HrmResource resource = (HrmResource) obj[16];
+            HrmResource resource = (HrmResource) obj[22];
             map.put("name",resource.getName());
             map.put("department",resource.getDepartment().getName());
             map.put("workCode",resource.getWorkCode());
-            map.put("should_attendance",StringUtils.nullLong(obj[0]));
+            map.put("should_attendance",StringUtils.nullDouble(obj[0]));
             map.put("actual_attendance",StringUtils.nullDouble(obj[1]));
-            map.put("should_attendance_time",StringUtils.nullLong(obj[2]));
-            map.put("actual_attendance_time",StringUtils.nullLong(obj[3]));
-            map.put("late_count",StringUtils.nullLong(obj[4]));
-            map.put("late_time",StringUtils.nullLong(obj[5]));
-            map.put("early_count",StringUtils.nullLong(obj[6]));
-            map.put("early_time",StringUtils.nullLong(obj[7]));
-            map.put("absenteeism_count",StringUtils.nullLong(obj[8]));
-            map.put("absenteeism_time",StringUtils.nullLong(obj[9]));
-            map.put("ot_normal",StringUtils.nullLong(obj[10]));
-            map.put("ot_weekend",StringUtils.nullLong(obj[11]));
-            map.put("ot_festival",StringUtils.nullLong(obj[12]));
-            map.put("leave_personal",StringUtils.nullLong(obj[13]));
-            map.put("leave_rest",StringUtils.nullLong(obj[14]));
-            map.put("leave_business",StringUtils.nullLong(obj[15]));
+            map.put("should_attendance_time",StringUtils.nullDouble(obj[2]));
+            map.put("actual_attendance_time",StringUtils.nullDouble(obj[3]));
+            map.put("late_count",StringUtils.nullDouble(obj[4]));
+            map.put("late_time",StringUtils.nullDouble(obj[5]));
+            map.put("early_count",StringUtils.nullDouble(obj[6]));
+            map.put("early_time",StringUtils.nullDouble(obj[7]));
+            map.put("absenteeism_count",StringUtils.nullDouble(obj[8]));
+            map.put("absenteeism_time",StringUtils.nullDouble(obj[9]));
+            map.put("ot_normal",StringUtils.nullDouble(obj[10]));
+            map.put("ot_weekend",StringUtils.nullDouble(obj[11]));
+            map.put("ot_festival",StringUtils.nullDouble(obj[12]));
+            map.put("leave_personal",StringUtils.nullDouble(obj[13]));
+            map.put("leave_rest",StringUtils.nullDouble(obj[14]));
+            map.put("leave_business",StringUtils.nullDouble(obj[15]));
+            map.put("leave_sick",StringUtils.nullDouble(obj[16]));
+            map.put("leave_injury",StringUtils.nullDouble(obj[17]));
+            map.put("leave_delivery",StringUtils.nullDouble(obj[18]));
+            map.put("leave_married",StringUtils.nullDouble(obj[19]));
+            map.put("leave_funeral",StringUtils.nullDouble(obj[20]));
+            map.put("leave_annual",StringUtils.nullDouble(obj[21]));
+
             mapList.add(map);
         }
         info.setData(mapList);

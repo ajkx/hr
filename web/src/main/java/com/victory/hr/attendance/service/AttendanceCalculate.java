@@ -8,10 +8,8 @@ import com.victory.hr.attendance.enums.SpecialType;
 import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.common.utils.DateUtils;
 import com.victory.hr.common.utils.StringUtils;
-import com.victory.hr.hrm.dao.HrmResourceDao;
 import com.victory.hr.hrm.entity.HrmResource;
 import com.victory.hr.hrm.service.HrmResourceService;
-import com.victory.hr.schedule.service.JobBeanCfgService;
 import com.victory.hr.util.ClassUtil;
 import com.victory.hr.vo.TimeVo;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Created by ajkx

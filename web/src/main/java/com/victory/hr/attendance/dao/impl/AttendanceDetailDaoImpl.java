@@ -8,6 +8,8 @@ import com.victory.hr.attendance.enums.Status;
 import com.victory.hr.common.dao.BaseDao;
 import com.victory.hr.common.dao.BaseDaoImpl;
 import com.victory.hr.common.search.PageInfo;
+import com.victory.hr.common.search.Searchable;
+import com.victory.hr.common.utils.HibernateUtils;
 import com.victory.hr.hrm.entity.HrmResource;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -62,10 +64,18 @@ public class AttendanceDetailDaoImpl extends BaseDaoImpl<AttendanceDetail,Intege
                 .add(Projections.sum("leave_personal"))
                 .add(Projections.sum("leave_rest"))
                 .add(Projections.sum("leave_business"))
+                .add(Projections.sum("leave_sick"))
+                .add(Projections.sum("leave_injury"))
+                .add(Projections.sum("leave_delivery"))
+                .add(Projections.sum("leave_married"))
+                .add(Projections.sum("leave_funeral"))
+                .add(Projections.sum("leave_annual"))
                 .add(Projections.groupProperty("resource"))
         );
-        criteria.setFirstResult((pageNo - 1) * pageSize);
-        criteria.setMaxResults(pageSize);
+        if (pageNo != 0 && pageSize != 0) {
+            criteria.setFirstResult((pageNo - 1) * pageSize);
+            criteria.setMaxResults(pageSize);
+        }
         PageInfo pageInfo = new PageInfo(totals, criteria.list());
         return pageInfo;
     }
@@ -74,4 +84,6 @@ public class AttendanceDetailDaoImpl extends BaseDaoImpl<AttendanceDetail,Intege
     public List<AttendanceDetail> findByHrmResourceAndDate(HrmResource resource, Date date) {
         return find("select a from AttendanceDetail a where resource = ?0 and date = ?1",resource,date);
     }
+
+
 }
